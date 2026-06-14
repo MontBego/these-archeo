@@ -2,1648 +2,1807 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1C1917">
+<title>Carnet de thèse — Art rupestre du Maroc</title>
+
+<!-- PWA / iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Thèse Archéo">
-<title>Thèse Archéo — Suivi de Recherche</title>
+<meta name="description" content="Plateforme de suivi de thèse — art rupestre et sites préhistoriques du Maroc">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500;600&display=swap');
+/* ============================================================
+   SYSTÈME DE DESIGN — strates, terre, encre
+   ============================================================ */
+:root{
+  --paper:#FBF6EC;
+  --sand:#F2EAD8;
+  --sand-deep:#E7DBC2;
+  --sand-edge:#DCCDAE;
+  --ink:#1C1917;
+  --ink-soft:#3A332C;
+  --muted:#7A6E5C;
+  --muted-2:#9A8C76;
+  --sienna:#B85C2C;
+  --sienna-deep:#9A4A20;
+  --sage:#5C7A5E;
+  --sage-deep:#465F48;
+  --line:rgba(28,25,23,.12);
+  --line-soft:rgba(28,25,23,.07);
+  --shadow:0 1px 2px rgba(28,25,23,.06),0 8px 28px -12px rgba(28,25,23,.22);
+  --shadow-lg:0 24px 60px -20px rgba(28,25,23,.40);
+  --radius:14px;
+  --radius-sm:9px;
+  --radius-lg:22px;
+  --font-display:"Playfair Display",Georgia,serif;
+  --font-body:"Inter",system-ui,-apple-system,sans-serif;
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --nav-h:64px;
+  --bar-h:58px;
 
-  :root {
-    --sable: #F2EAD8;
-    --sable-clair: #FAF6EE;
-    --encre: #1C1917;
-    --encre-douce: #3D3530;
-    --sienne: #B85C2C;
-    --sienne-clair: #E8896A;
-    --sauge: #5C7A5E;
-    --sauge-clair: #8FAF91;
-    --gris: #8C8078;
-    --gris-clair: #D4CCC0;
-    --blanc: #FEFCF8;
-    --rouge-doux: #C0392B;
-    --bleu-doux: #2980B9;
-    --violet-doux: #8E44AD;
-    --or: #D4A017;
-  }
+  /* statuts & catégories */
+  --st-afaire:#9A8C76;
+  --st-encours:#B8862C;
+  --st-urgent:#C0432B;
+  --st-fait:#5C7A5E;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--sand);
+  background-image:
+    radial-gradient(120% 80% at 50% -10%, #F7F0E0 0%, var(--sand) 55%, var(--sand-deep) 100%);
+  background-attachment:fixed;
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:none;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+input,textarea,select{font-family:inherit;font-size:15px;color:var(--ink);}
+a{color:var(--sienna-deep);text-decoration:none;}
+::selection{background:var(--sienna);color:#fff;}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;line-height:1.12;margin:0;letter-spacing:-.01em;}
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--sable);
-    color: var(--encre);
-    min-height: 100vh;
-    font-size: 15px;
-  }
+/* scrollbars discrets */
+::-webkit-scrollbar{width:9px;height:9px;}
+::-webkit-scrollbar-thumb{background:var(--sand-edge);border-radius:20px;border:2px solid transparent;background-clip:content-box;}
 
-  /* ── HEADER ── */
-  header {
-    background: var(--encre);
-    color: var(--sable);
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 12px rgba(28,25,23,0.3);
-  }
-  header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    letter-spacing: 0.02em;
-    color: var(--sable);
-  }
-  header span.subtitle {
-    font-size: 0.7rem;
-    color: var(--gris);
-    display: block;
-    font-weight: 300;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-top: 1px;
-  }
-  .header-actions { display: flex; gap: 8px; }
-  .btn-export {
-    background: var(--sienne);
-    color: white;
-    border: none;
-    padding: 7px 14px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .btn-export:hover { background: var(--sienne-clair); }
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+.app{min-height:100dvh;display:flex;flex-direction:column;}
 
-  /* ── NAV ── */
-  nav {
-    background: var(--blanc);
-    border-bottom: 1px solid var(--gris-clair);
-    display: flex;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    position: sticky;
-    top: 60px;
-    z-index: 99;
-  }
-  nav::-webkit-scrollbar { display: none; }
-  .nav-tab {
-    padding: 12px 18px;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--gris);
-    cursor: pointer;
-    white-space: nowrap;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .nav-tab.active {
-    color: var(--sienne);
-    border-bottom-color: var(--sienne);
-  }
-  .nav-tab:hover { color: var(--encre); }
-  .badge {
-    background: var(--sienne);
-    color: white;
-    border-radius: 10px;
-    padding: 1px 6px;
-    font-size: 0.68rem;
-    font-weight: 600;
-    min-width: 18px;
-    text-align: center;
-  }
+/* Barre supérieure */
+.topbar{
+  position:sticky;top:0;z-index:60;
+  padding:calc(var(--safe-top) + 10px) 16px 10px;
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(180deg, rgba(251,246,236,.94), rgba(251,246,236,.78));
+  backdrop-filter:saturate(140%) blur(14px);
+  -webkit-backdrop-filter:saturate(140%) blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:0;flex:0 0 auto;}
+.brand-mark{
+  width:38px;height:38px;border-radius:11px;flex:0 0 auto;
+  background:linear-gradient(160deg,#2A2420,#4A3F34);
+  display:grid;place-items:center;box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+.brand-mark svg{width:24px;height:24px;}
+.brand-txt{min-width:0;}
+.brand-txt h1{font-size:16px;letter-spacing:-.02em;white-space:nowrap;}
+.brand-txt p{margin:0;font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;font-weight:600;}
 
-  /* ── SECTIONS ── */
-  .section { display: none; padding: 20px 16px 80px; max-width: 900px; margin: 0 auto; }
-  .section.active { display: block; }
+.topbar-spacer{flex:1;}
+.icon-btn{
+  width:40px;height:40px;border-radius:11px;display:grid;place-items:center;flex:0 0 auto;
+  color:var(--ink-soft);border:1px solid transparent;transition:.16s;
+}
+.icon-btn:hover{background:var(--sand);border-color:var(--line);}
+.icon-btn:active{transform:scale(.94);}
+.icon-btn svg{width:20px;height:20px;}
 
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    color: var(--encre);
-    margin-bottom: 6px;
-  }
-  .section-sub {
-    font-size: 0.78rem;
-    color: var(--gris);
-    margin-bottom: 20px;
-    letter-spacing: 0.04em;
-  }
+/* Recherche globale */
+.search-wrap{position:relative;flex:1;max-width:340px;}
+.search-wrap input{
+  width:100%;height:40px;border-radius:11px;border:1px solid var(--line);
+  background:var(--paper);padding:0 14px 0 38px;outline:none;transition:.16s;
+}
+.search-wrap input:focus{border-color:var(--sienna);box-shadow:0 0 0 3px rgba(184,92,44,.12);}
+.search-wrap .s-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
+.search-wrap .s-ico svg{width:18px;height:18px;display:block;}
 
-  /* ── CARDS ── */
-  .card {
-    background: var(--blanc);
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 12px;
-    border: 1px solid var(--gris-clair);
-    transition: box-shadow 0.2s;
-  }
-  .card:hover { box-shadow: 0 4px 16px rgba(28,25,23,0.08); }
-  .card-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .card-title {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--encre);
-    line-height: 1.3;
-  }
-  .card-meta {
-    font-size: 0.75rem;
-    color: var(--gris);
-    margin-top: 5px;
-    line-height: 1.5;
-  }
-  .card-actions { display: flex; gap: 6px; flex-shrink: 0; }
-  .btn-icon {
-    background: none;
-    border: 1px solid var(--gris-clair);
-    border-radius: 6px;
-    padding: 5px 8px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    color: var(--gris);
-    transition: all 0.15s;
-  }
-  .btn-icon:hover { border-color: var(--sienne); color: var(--sienne); }
-  .btn-icon.danger:hover { border-color: var(--rouge-doux); color: var(--rouge-doux); }
+.search-results{
+  position:absolute;top:48px;left:0;right:0;z-index:80;
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);max-height:60vh;overflow:auto;padding:6px;display:none;
+}
+.search-results.open{display:block;}
+.sr-group-label{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-2);font-weight:700;padding:9px 10px 4px;}
+.sr-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;cursor:pointer;}
+.sr-item:hover{background:var(--sand);}
+.sr-item .sr-ic{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;flex:0 0 auto;font-size:14px;background:var(--sand-deep);}
+.sr-item .sr-tx{min-width:0;}
+.sr-item .sr-tx b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sr-item .sr-tx span{font-size:12px;color:var(--muted);}
+.sr-empty{padding:18px;text-align:center;color:var(--muted);font-size:13px;}
 
-  /* ── TAGS ── */
-  .tag {
-    display: inline-block;
-    padding: 2px 9px;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 500;
-    margin: 3px 3px 0 0;
-  }
-  .tag-colloque { background: #EDE7F6; color: #6A1B9A; }
-  .tag-papier { background: #E3F2FD; color: #1565C0; }
-  .tag-terrain { background: #E8F5E9; color: #2E7D32; }
-  .tag-asso { background: #FFF3E0; color: #E65100; }
-  .tag-rdv { background: #FCE4EC; color: #AD1457; }
-  .tag-these { background: #F3E5F5; color: #6A1B9A; }
-  .tag-urgent { background: #FFEBEE; color: #B71C1C; }
-  .tag-fait { background: #E8F5E9; color: #1B5E20; }
+/* Navigation principale (haut sur desktop, bas sur mobile) */
+.nav{
+  display:flex;gap:4px;padding:8px 16px;overflow-x:auto;scrollbar-width:none;
+  border-bottom:1px solid var(--line);background:rgba(247,240,224,.5);
+  position:sticky;top:calc(var(--safe-top) + 60px);z-index:55;backdrop-filter:blur(8px);
+}
+.nav::-webkit-scrollbar{display:none;}
+.nav-item{
+  display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;
+  font-size:14px;font-weight:600;color:var(--muted);white-space:nowrap;transition:.16s;flex:0 0 auto;
+}
+.nav-item svg{width:18px;height:18px;}
+.nav-item:hover{color:var(--ink);background:var(--sand);}
+.nav-item.active{color:var(--ink);background:var(--paper);box-shadow:var(--shadow);}
+.nav-item.active svg{color:var(--sienna);}
 
-  /* ── STATUT TÂCHE ── */
-  .statut-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-top: 4px;
-  }
-  .statut-todo { background: var(--gris-clair); }
-  .statut-encours { background: var(--or); }
-  .statut-fait { background: var(--sauge); }
-  .statut-urgent { background: var(--rouge-doux); }
+/* Contenu */
+.main{flex:1;padding:22px 16px calc(40px + var(--safe-bottom));max-width:1180px;margin:0 auto;width:100%;}
+.view{display:none;animation:fade .3s ease;}
+.view.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
 
-  /* ── BOUTON AJOUTER ── */
-  .btn-add {
-    background: var(--sienne);
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: background 0.2s;
-    margin-bottom: 20px;
-  }
-  .btn-add:hover { background: var(--sienne-clair); }
+/* En-tête de section */
+.view-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap;}
+.view-head .vh-title{display:flex;flex-direction:column;gap:3px;}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--sienna);font-weight:700;}
+.view-head h2{font-size:30px;}
+.view-head .count-pill{font-family:var(--font-mono);font-size:12px;color:var(--muted);}
 
-  /* ── TANKS KANBAN ── */
-  .tanks-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 14px;
-    margin-bottom: 24px;
-  }
-  .tank {
-    background: var(--sable-clair);
-    border-radius: 10px;
-    padding: 14px;
-    border: 1px solid var(--gris-clair);
-    min-height: 120px;
-  }
-  .tank-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-  .tank-title {
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--encre-douce);
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
-  .tank-icon { font-size: 1rem; }
-  .tank-count {
-    font-size: 0.72rem;
-    background: var(--gris-clair);
-    color: var(--gris);
-    padding: 1px 7px;
-    border-radius: 10px;
-    font-weight: 600;
-  }
-  .tank-item {
-    background: var(--blanc);
-    border-radius: 7px;
-    padding: 9px 11px;
-    margin-bottom: 7px;
-    font-size: 0.82rem;
-    border-left: 3px solid var(--gris-clair);
-    cursor: pointer;
-    transition: box-shadow 0.15s;
-    line-height: 1.4;
-  }
-  .tank-item:hover { box-shadow: 0 2px 8px rgba(28,25,23,0.1); }
-  .tank-item.urgent { border-left-color: var(--rouge-doux); }
-  .tank-item.encours { border-left-color: var(--or); }
-  .tank-item.fait { border-left-color: var(--sauge); opacity: 0.7; }
-  .tank-item-date { font-size: 0.7rem; color: var(--gris); margin-top: 3px; }
+/* Boutons */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 16px;border-radius:11px;
+  font-weight:600;font-size:14px;transition:.16s;border:1px solid transparent;white-space:nowrap;
+}
+.btn svg{width:18px;height:18px;}
+.btn-primary{background:var(--ink);color:var(--paper);box-shadow:var(--shadow);}
+.btn-primary:hover{background:#000;}
+.btn-primary:active{transform:translateY(1px);}
+.btn-accent{background:var(--sienna);color:#fff;box-shadow:0 6px 18px -8px rgba(184,92,44,.7);}
+.btn-accent:hover{background:var(--sienna-deep);}
+.btn-ghost{background:var(--paper);color:var(--ink);border-color:var(--line);}
+.btn-ghost:hover{background:var(--sand);border-color:var(--sand-edge);}
+.btn-sm{height:34px;padding:0 12px;font-size:13px;border-radius:9px;}
+.btn-danger{color:var(--sienna-deep);}
+.btn-danger:hover{background:rgba(192,67,43,.1);}
 
-  /* ── AGENDA ── */
-  .agenda-month {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  .agenda-month h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-  }
-  .btn-nav {
-    background: var(--blanc);
-    border: 1px solid var(--gris-clair);
-    border-radius: 6px;
-    padding: 6px 12px;
-    cursor: pointer;
-    color: var(--encre);
-    font-size: 0.85rem;
-    transition: all 0.15s;
-  }
-  .btn-nav:hover { border-color: var(--sienne); color: var(--sienne); }
-  .cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
-    background: var(--blanc);
-    border-radius: 10px;
-    padding: 12px;
-    border: 1px solid var(--gris-clair);
-    margin-bottom: 20px;
-  }
-  .cal-day-header {
-    text-align: center;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--gris);
-    padding: 6px 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .cal-day {
-    text-align: center;
-    padding: 8px 2px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.82rem;
-    transition: background 0.15s;
-    position: relative;
-    min-height: 36px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  .cal-day:hover { background: var(--sable); }
-  .cal-day.today { background: var(--sienne); color: white; border-radius: 6px; }
-  .cal-day.today:hover { background: var(--sienne-clair); }
-  .cal-day.other-month { color: var(--gris-clair); }
-  .cal-day.has-event::after {
-    content: '';
-    width: 5px; height: 5px;
-    background: var(--sauge);
-    border-radius: 50%;
-    margin-top: 2px;
-  }
-  .cal-day.today.has-event::after { background: white; }
-  .events-list { margin-top: 8px; }
-  .event-item {
-    background: var(--blanc);
-    border-radius: 8px;
-    padding: 12px 14px;
-    margin-bottom: 8px;
-    border-left: 3px solid var(--sienne);
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    border: 1px solid var(--gris-clair);
-    border-left: 3px solid var(--sienne);
-  }
-  .event-date-block {
-    text-align: center;
-    min-width: 44px;
-    background: var(--sable);
-    border-radius: 6px;
-    padding: 5px 4px;
-  }
-  .event-day { font-size: 1.3rem; font-weight: 700; line-height: 1; color: var(--sienne); }
-  .event-month { font-size: 0.65rem; text-transform: uppercase; color: var(--gris); letter-spacing: 0.05em; }
-  .event-content { flex: 1; }
-  .event-title { font-weight: 600; font-size: 0.88rem; }
-  .event-meta { font-size: 0.75rem; color: var(--gris); margin-top: 3px; }
+/* Cartes & grilles */
+.grid{display:grid;gap:14px;}
+.grid-cards{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
+.card{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);transition:.18s;position:relative;overflow:hidden;
+}
+.card.click{cursor:pointer;}
+.card.click:hover{transform:translateY(-2px);border-color:var(--sand-edge);box-shadow:0 14px 36px -16px rgba(28,25,23,.32);}
+.card-strata{height:5px;width:100%;background:linear-gradient(90deg,var(--sienna),var(--sand-edge) 70%);}
+.card-body{padding:16px;}
 
-  /* ── CONTACTS ── */
-  .contact-card {
-    background: var(--blanc);
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 12px;
-    border: 1px solid var(--gris-clair);
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-  }
-  .contact-avatar {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    background: var(--sienne);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-  }
-  .contact-info { flex: 1; }
-  .contact-name { font-weight: 600; font-size: 0.95rem; }
-  .contact-role { font-size: 0.78rem; color: var(--gris); margin-top: 2px; }
-  .contact-details { font-size: 0.78rem; color: var(--encre-douce); margin-top: 6px; line-height: 1.6; }
-  .contact-statut {
-    font-size: 0.7rem;
-    padding: 2px 8px;
-    border-radius: 10px;
-    margin-top: 6px;
-    display: inline-block;
-  }
-  .statut-contacte { background: #E8F5E9; color: #2E7D32; }
-  .statut-acontacter { background: #FFF3E0; color: #E65100; }
-  .statut-rencontre { background: #E3F2FD; color: #1565C0; }
+/* Étiquettes / tags */
+.tags{display:flex;flex-wrap:wrap;gap:6px;}
+.tag{
+  display:inline-flex;align-items:center;gap:5px;height:25px;padding:0 9px;border-radius:20px;
+  font-size:12px;font-weight:600;background:var(--sand-deep);color:var(--ink-soft);border:1px solid var(--line-soft);
+}
+.tag.tag-x{cursor:pointer;}
+.tag .x{opacity:.5;font-weight:700;}
+.tag.sel{background:var(--ink);color:var(--paper);}
+.tag.sienna{background:rgba(184,92,44,.14);color:var(--sienna-deep);}
+.tag.sage{background:rgba(92,122,94,.16);color:var(--sage-deep);}
 
-  /* ── SITES ── */
-  .site-card {
-    background: var(--blanc);
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    border: 1px solid var(--gris-clair);
-  }
-  .site-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .site-icon { font-size: 1.2rem; }
-  .site-name { font-weight: 600; font-size: 0.92rem; }
-  .site-region { font-size: 0.75rem; color: var(--gris); }
-  .site-tags { margin-top: 6px; }
-  .tradition-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    margin-right: 4px;
-    margin-top: 3px;
-  }
-  .trad-tazina { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
-  .trad-libyco { background: #EDE7F6; color: #4527A0; border: 1px solid #CE93D8; }
-  .trad-gravure { background: #E8F5E9; color: #1B5E20; border: 1px solid #A5D6A7; }
-  .trad-peinture { background: #FCE4EC; color: #880E4F; border: 1px solid #F48FB1; }
-  .trad-neolithique { background: #E3F2FD; color: #0D47A1; border: 1px solid #90CAF9; }
+/* Pastilles de statut */
+.dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;display:inline-block;}
+.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:7px;font-size:12px;font-weight:600;}
+.chip.afaire{background:rgba(154,140,118,.16);color:#6c604e;}
+.chip.encours{background:rgba(184,134,44,.16);color:#8a6312;}
+.chip.urgent{background:rgba(192,67,43,.14);color:var(--sienna-deep);}
+.chip.fait{background:rgba(92,122,94,.16);color:var(--sage-deep);}
 
-  /* ── BIBLIO ── */
-  .biblio-card {
-    background: var(--blanc);
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    border: 1px solid var(--gris-clair);
-    border-left: 3px solid var(--bleu-doux);
-  }
-  .biblio-title { font-weight: 600; font-size: 0.9rem; font-style: italic; color: var(--encre); }
-  .biblio-authors { font-size: 0.78rem; color: var(--sienne); margin-top: 3px; font-weight: 500; }
-  .biblio-source { font-size: 0.75rem; color: var(--gris); margin-top: 3px; }
-  .biblio-tags { margin-top: 6px; }
+/* Champs de formulaire */
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px;}
+.field input,.field textarea,.field select{
+  width:100%;background:var(--sand);border:1px solid var(--line);border-radius:10px;
+  padding:11px 13px;outline:none;transition:.16s;
+}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--sienna);background:var(--paper);box-shadow:0 0 0 3px rgba(184,92,44,.1);}
+.field textarea{resize:vertical;min-height:78px;line-height:1.55;}
+.field .hint{font-size:11.5px;color:var(--muted-2);margin-top:5px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
-  /* ── MODAL ── */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(28,25,23,0.6);
-    z-index: 200;
-    align-items: flex-end;
-    justify-content: center;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--blanc);
-    border-radius: 16px 16px 0 0;
-    padding: 24px 20px 40px;
-    width: 100%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    animation: slideUp 0.25s ease;
-  }
-  @keyframes slideUp {
-    from { transform: translateY(60px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-  .modal-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    color: var(--encre);
-  }
-  .form-group { margin-bottom: 14px; }
-  .form-group label {
-    display: block;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--encre-douce);
-    margin-bottom: 5px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--gris-clair);
-    border-radius: 7px;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.88rem;
-    color: var(--encre);
-    background: var(--sable-clair);
-    transition: border-color 0.15s;
-    -webkit-appearance: none;
-  }
-  .form-group input:focus,
-  .form-group select:focus,
-  .form-group textarea:focus {
-    outline: none;
-    border-color: var(--sienne);
-    background: var(--blanc);
-  }
-  .form-group textarea { resize: vertical; min-height: 80px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
-  .btn-primary {
-    flex: 1;
-    background: var(--sienne);
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .btn-primary:hover { background: var(--sienne-clair); }
-  .btn-secondary {
-    background: var(--sable);
-    color: var(--encre);
-    border: 1px solid var(--gris-clair);
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .btn-secondary:hover { background: var(--gris-clair); }
+/* Modal / slide-up */
+.modal-scrim{
+  position:fixed;inset:0;z-index:100;background:rgba(28,25,23,.46);
+  backdrop-filter:blur(3px);display:none;opacity:0;transition:opacity .25s;
+}
+.modal-scrim.open{display:block;opacity:1;}
+.modal{
+  position:fixed;z-index:101;background:var(--paper);
+  left:50%;top:50%;transform:translate(-50%,-46%);width:min(620px,calc(100vw - 32px));
+  max-height:88vh;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);
+  display:none;flex-direction:column;overflow:hidden;opacity:0;transition:.28s cubic-bezier(.2,.8,.2,1);
+}
+.modal.open{display:flex;opacity:1;transform:translate(-50%,-50%);}
+.modal-head{
+  padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;
+  background:linear-gradient(180deg,var(--paper),rgba(242,234,216,.4));
+}
+.modal-head h3{font-size:21px;flex:1;min-width:0;}
+.modal-body{padding:20px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.modal-foot{padding:14px 20px calc(14px + var(--safe-bottom));border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;background:var(--paper);}
+@media (max-width:600px){
+  .modal{left:0;right:0;bottom:0;top:auto;transform:translateY(100%);width:100%;max-height:92vh;
+    border-radius:22px 22px 0 0;}
+  .modal.open{transform:translateY(0);}
+  .field-row{grid-template-columns:1fr;}
+}
 
-  /* ── EMPTY STATE ── */
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--gris);
-  }
-  .empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
-  .empty-state p { font-size: 0.85rem; line-height: 1.6; }
+/* Empty states */
+.empty{text-align:center;padding:54px 20px;color:var(--muted);}
+.empty svg{width:46px;height:46px;color:var(--sand-edge);margin-bottom:12px;}
+.empty h4{font-family:var(--font-display);font-size:20px;color:var(--ink-soft);margin-bottom:6px;}
+.empty p{font-size:14px;max-width:340px;margin:0 auto 16px;}
 
-  /* ── STATS ── */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 24px;
-  }
-  .stat-card {
-    background: var(--blanc);
-    border-radius: 10px;
-    padding: 14px;
-    border: 1px solid var(--gris-clair);
-    text-align: center;
-  }
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    color: var(--sienne);
-    font-weight: 400;
-    line-height: 1;
-  }
-  .stat-label { font-size: 0.72rem; color: var(--gris); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+/* Toolbar filtres */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
+.seg{display:inline-flex;background:var(--sand);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;}
+.seg button{padding:7px 13px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);transition:.14s;}
+.seg button.on{background:var(--paper);color:var(--ink);box-shadow:var(--shadow);}
+.filterbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
 
-  /* ── FILTRE ── */
-  .filtres {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-  .filtre-btn {
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--gris-clair);
-    background: var(--blanc);
-    font-size: 0.75rem;
-    cursor: pointer;
-    color: var(--gris);
-    transition: all 0.15s;
-  }
-  .filtre-btn.active, .filtre-btn:hover {
-    background: var(--sienne);
-    color: white;
-    border-color: var(--sienne);
-  }
+/* ============================================================
+   TABLEAU DE BORD
+   ============================================================ */
+.dash-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;}
+.stat{grid-column:span 4;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.stat .stat-num{font-family:var(--font-display);font-size:38px;font-weight:800;line-height:1;letter-spacing:-.02em;}
+.stat .stat-lab{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-top:7px;}
+.stat .stat-ic{position:absolute;top:14px;right:14px;width:30px;height:30px;color:var(--sand-edge);}
+.stat.accent .stat-num{color:var(--sienna);}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.panel-head{padding:15px 17px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.panel-head h3{font-size:18px;}
+.panel-head .ph-link{font-size:12.5px;color:var(--sienna-deep);font-weight:600;cursor:pointer;}
+.panel-body{padding:8px;}
 
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--gris-clair); border-radius: 3px; }
+.graph-card{grid-column:span 7;}
+.side-col{grid-column:span 5;display:flex;flex-direction:column;gap:14px;}
+.cat-tanks{grid-column:span 12;}
 
-  @media (min-width: 600px) {
-    .stats-grid { grid-template-columns: repeat(4, 1fr); }
-    .modal { border-radius: 16px; margin: 20px; }
-    .modal-overlay { align-items: center; }
+.mini-row{display:flex;align-items:center;gap:11px;padding:10px 11px;border-radius:10px;cursor:pointer;transition:.14s;}
+.mini-row:hover{background:var(--sand);}
+.mini-row .mr-main{flex:1;min-width:0;}
+.mini-row .mr-main b{font-size:14px;font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mini-row .mr-main span{font-size:12px;color:var(--muted);}
+.mini-date{font-family:var(--font-mono);font-size:12px;color:var(--muted);text-align:right;flex:0 0 auto;}
+
+.tank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:6px;}
+.tank{background:var(--sand);border:1px solid var(--line);border-radius:11px;padding:13px;}
+.tank b{font-family:var(--font-display);font-size:24px;font-weight:700;}
+.tank span{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-top:2px;}
+.tank .tbar{height:4px;border-radius:3px;margin-top:9px;background:var(--sand-edge);overflow:hidden;}
+.tank .tbar i{display:block;height:100%;background:var(--sienna);border-radius:3px;}
+
+/* Graphe de connexions (SVG) */
+#graphSvg{width:100%;height:340px;display:block;}
+#graphSvg .edge{stroke:var(--sand-edge);stroke-linecap:round;transition:.2s;}
+#graphSvg .edge.hot{stroke:var(--sienna);}
+#graphSvg .node-c{cursor:pointer;}
+#graphSvg .node-c:hover circle{filter:brightness(.96);}
+#graphSvg .node-lab{font-family:var(--font-body);font-weight:700;font-size:13px;fill:var(--paper);text-anchor:middle;}
+#graphSvg .node-cnt{font-family:var(--font-display);font-weight:800;font-size:19px;fill:var(--paper);text-anchor:middle;}
+#graphSvg .edge-lab{font-family:var(--font-mono);font-size:10px;fill:var(--muted);text-anchor:middle;}
+
+/* ============================================================
+   FRISE / TIMELINE (Tâches)
+   ============================================================ */
+.timeline-wrap{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.tl-monthbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);}
+.tl-monthbar h3{font-size:19px;text-transform:capitalize;}
+.tl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.tl-inner{min-width:max-content;}
+.tl-days{display:flex;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:2;}
+.tl-day{width:42px;flex:0 0 42px;text-align:center;padding:7px 0;border-left:1px solid var(--line-soft);}
+.tl-day.wknd{background:rgba(231,219,194,.4);}
+.tl-day.today{background:rgba(184,92,44,.1);}
+.tl-day .d-dow{font-size:10px;color:var(--muted);text-transform:uppercase;font-weight:700;}
+.tl-day .d-num{font-size:14px;font-weight:700;}
+.tl-day.today .d-num{color:var(--sienna);}
+.tl-lane-label{padding:9px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);background:var(--sand);border-bottom:1px solid var(--line-soft);position:sticky;left:0;}
+.tl-row{display:flex;align-items:center;min-height:46px;border-bottom:1px solid var(--line-soft);position:relative;}
+.tl-grid{display:flex;position:absolute;inset:0;pointer-events:none;}
+.tl-grid i{width:42px;flex:0 0 42px;border-left:1px solid var(--line-soft);}
+.tl-grid i.wknd{background:rgba(231,219,194,.25);}
+.tl-bar{
+  position:absolute;height:30px;top:8px;border-radius:8px;display:flex;align-items:center;gap:7px;
+  padding:0 9px;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:var(--shadow);
+  overflow:hidden;white-space:nowrap;z-index:1;
+}
+.tl-bar .tb-check{width:16px;height:16px;border-radius:5px;border:1.5px solid rgba(255,255,255,.7);display:grid;place-items:center;flex:0 0 auto;background:rgba(255,255,255,.12);}
+.tl-bar.done{opacity:.55;text-decoration:line-through;}
+.tl-bar.done .tb-check{background:#fff;color:var(--ink);}
+.tl-empty-lane{padding:14px;color:var(--muted-2);font-size:13px;font-style:italic;}
+
+/* Kanban */
+.kanban{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch;}
+.kan-col{flex:0 0 270px;background:rgba(247,240,224,.6);border:1px solid var(--line);border-radius:var(--radius);display:flex;flex-direction:column;max-height:70vh;}
+.kan-col-head{padding:12px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);font-weight:700;}
+.kan-col-head .kc-count{margin-left:auto;font-family:var(--font-mono);font-size:12px;color:var(--muted);}
+.kan-list{padding:10px;display:flex;flex-direction:column;gap:9px;overflow-y:auto;}
+.kan-card{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:12px;box-shadow:var(--shadow);cursor:pointer;transition:.15s;}
+.kan-card:hover{transform:translateY(-2px);border-color:var(--sand-edge);}
+.kan-card b{font-size:14px;display:block;margin-bottom:4px;}
+.kan-card .kc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin-top:8px;}
+
+/* ============================================================
+   AGENDA
+   ============================================================ */
+.cal{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.cal-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--line);}
+.cal-head h3{font-size:20px;text-transform:capitalize;}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--line);}
+.cal-dow div{text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);}
+.cal-cell{min-height:84px;border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);padding:5px;cursor:pointer;transition:.12s;position:relative;}
+.cal-cell:hover{background:var(--sand);}
+.cal-cell.out{background:rgba(231,219,194,.22);}
+.cal-cell .cc-num{font-size:13px;font-weight:600;color:var(--ink-soft);}
+.cal-cell.today .cc-num{background:var(--sienna);color:#fff;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;}
+.cal-cell.out .cc-num{color:var(--muted-2);}
+.cc-ev{margin-top:3px;font-size:10.5px;font-weight:600;padding:2px 5px;border-radius:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cal-cell .cc-more{font-size:10px;color:var(--muted);margin-top:2px;}
+@media (max-width:600px){.cal-cell{min-height:58px;}.cc-ev{font-size:9px;}}
+
+.ev-type-colloque{background:rgba(184,92,44,.16);color:var(--sienna-deep);}
+.ev-type-rdv{background:rgba(92,122,94,.18);color:var(--sage-deep);}
+.ev-type-terrain{background:rgba(139,94,44,.18);color:#7a4f15;}
+.ev-type-deadline{background:rgba(192,67,43,.16);color:var(--sienna-deep);}
+.ev-type-soutenance{background:rgba(28,25,23,.12);color:var(--ink);}
+.ev-type-autre{background:var(--sand-deep);color:var(--ink-soft);}
+
+/* ============================================================
+   DÉTAIL FICHE (panneau dans modal)
+   ============================================================ */
+.detail-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:4px 0 16px;}
+.dm{background:var(--sand);border:1px solid var(--line-soft);border-radius:10px;padding:10px 12px;}
+.dm .dm-l{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;}
+.dm .dm-v{font-size:14px;font-weight:600;margin-top:2px;word-break:break-word;}
+.dm .dm-v.mono{font-family:var(--font-mono);font-size:13px;}
+.dm a.dm-v{color:var(--sienna-deep);cursor:pointer;}
+.detail-sec{margin-top:18px;}
+.detail-sec h4{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-family:var(--font-body);font-weight:800;margin-bottom:9px;display:flex;align-items:center;gap:8px;}
+.detail-sec h4::after{content:"";flex:1;height:1px;background:var(--line);}
+.link-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;background:var(--sand);border:1px solid var(--line);border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:.14s;margin:0 6px 6px 0;}
+.link-chip:hover{background:var(--paper);border-color:var(--sienna);color:var(--sienna-deep);}
+.link-chip svg{width:15px;height:15px;color:var(--muted);}
+.notes-block{background:var(--sand);border:1px solid var(--line-soft);border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.6;color:var(--ink-soft);white-space:pre-wrap;}
+.ai-summary{background:linear-gradient(160deg,rgba(92,122,94,.1),rgba(92,122,94,.04));border:1px solid rgba(92,122,94,.25);border-radius:11px;padding:14px;font-size:14px;line-height:1.6;white-space:pre-wrap;}
+.member-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+.member-row input{flex:1;}
+
+/* Multi-select tags dans formulaires */
+.tag-input-wrap{border:1px solid var(--line);border-radius:10px;background:var(--sand);padding:8px;}
+.tag-input-wrap input{border:none;background:transparent;outline:none;width:100%;padding:5px 4px;}
+.tag-suggest{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.tag-suggest .tag{cursor:pointer;}
+
+/* Toast */
+.toast-wrap{position:fixed;left:50%;bottom:calc(20px + var(--safe-bottom) + var(--nav-h));transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;}
+.toast{background:var(--ink);color:var(--paper);padding:11px 18px;border-radius:11px;font-size:14px;font-weight:600;box-shadow:var(--shadow-lg);animation:toastIn .3s ease;display:flex;align-items:center;gap:9px;}
+.toast.ok .ti{color:var(--sage);}
+.toast.err{background:var(--sienna-deep);}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+/* ============================================================
+   NAV MOBILE (bas)
+   ============================================================ */
+.mobile-nav{display:none;}
+@media (max-width:768px){
+  .nav{display:none;}
+  .search-wrap{max-width:none;}
+  .brand-txt p{display:none;}
+  .view-head h2{font-size:25px;}
+  .dash-grid .stat{grid-column:span 6;}
+  .graph-card,.side-col,.cat-tanks{grid-column:span 12;}
+  .mobile-nav{
+    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;height:calc(var(--nav-h) + var(--safe-bottom));
+    padding-bottom:var(--safe-bottom);
+    background:linear-gradient(180deg,rgba(251,246,236,.85),var(--paper));
+    backdrop-filter:saturate(150%) blur(16px);-webkit-backdrop-filter:saturate(150%) blur(16px);
+    border-top:1px solid var(--line);justify-content:space-around;align-items:stretch;
   }
+  .mn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-size:10px;font-weight:600;}
+  .mn-item svg{width:22px;height:22px;}
+  .mn-item.active{color:var(--sienna);}
+  .main{padding-bottom:calc(var(--nav-h) + var(--safe-bottom) + 30px);}
+  .toast-wrap{bottom:calc(20px + var(--safe-bottom) + var(--nav-h));}
+  .dash-grid{gap:10px;}
+}
+@media (min-width:769px){.mobile-nav{display:none;}}
+
+.hidden{display:none !important;}
+.muted{color:var(--muted);}
+.mono{font-family:var(--font-mono);}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+.spinner.dark{border-color:rgba(28,25,23,.2);border-top-color:var(--ink);}
+@keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
+<div class="app">
 
-<header>
-  <div>
-    <h1>Thèse Archéo</h1>
-    <span class="subtitle">Suivi de Recherche · Maroc</span>
-  </div>
-  <div class="header-actions">
-    <button class="btn-export" onclick="exporterDonnees()">↓ Export</button>
-  </div>
-</header>
-
-<nav>
-  <div class="nav-tab active" onclick="changerSection('tableau')">🗂 Tableau</div>
-  <div class="nav-tab" onclick="changerSection('taches')">✓ Tâches <span class="badge" id="badge-taches">0</span></div>
-  <div class="nav-tab" onclick="changerSection('agenda')">📅 Agenda</div>
-  <div class="nav-tab" onclick="changerSection('contacts')">👥 Réseau</div>
-  <div class="nav-tab" onclick="changerSection('sites')">🗺 Sites</div>
-  <div class="nav-tab" onclick="changerSection('biblio')">📚 Biblio</div>
-</nav>
-
-<!-- ══════════ TABLEAU DE BORD ══════════ -->
-<section id="section-tableau" class="section active">
-  <p class="section-title">Tableau de bord</p>
-  <p class="section-sub">Vue d'ensemble de ta recherche</p>
-
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-num" id="stat-taches">0</div>
-      <div class="stat-label">Tâches actives</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="stat-events">0</div>
-      <div class="stat-label">Événements</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="stat-contacts">0</div>
-      <div class="stat-label">Contacts</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="stat-sites">0</div>
-      <div class="stat-label">Sites</div>
-    </div>
-  </div>
-
-  <div class="section-title" style="font-size:1.05rem; margin-bottom:14px;">Tanks de travail</div>
-  <div class="tanks-grid" id="tanks-container"></div>
-
-  <div class="section-title" style="font-size:1.05rem; margin-bottom:14px;">Prochains événements</div>
-  <div id="prochains-events"></div>
-</section>
-
-<!-- ══════════ TÂCHES ══════════ -->
-<section id="section-taches" class="section">
-  <p class="section-title">Tâches</p>
-  <p class="section-sub">Gère tes actions, projets et démarches</p>
-
-  <button class="btn-add" onclick="ouvrirModal('tache')">+ Nouvelle tâche</button>
-
-  <div class="filtres" id="filtres-taches">
-    <button class="filtre-btn active" onclick="filtrerTaches('tous')">Toutes</button>
-    <button class="filtre-btn" onclick="filtrerTaches('colloque')">🎤 Colloques</button>
-    <button class="filtre-btn" onclick="filtrerTaches('papier')">📄 Papiers</button>
-    <button class="filtre-btn" onclick="filtrerTaches('terrain')">🏜 Terrain</button>
-    <button class="filtre-btn" onclick="filtrerTaches('asso')">🤝 Associations</button>
-    <button class="filtre-btn" onclick="filtrerTaches('rdv')">📞 RDV</button>
-    <button class="filtre-btn" onclick="filtrerTaches('these')">🎓 Thèse</button>
-  </div>
-
-  <div id="liste-taches"></div>
-</section>
-
-<!-- ══════════ AGENDA ══════════ -->
-<section id="section-agenda" class="section">
-  <p class="section-title">Agenda</p>
-  <p class="section-sub">Calendrier et événements</p>
-
-  <button class="btn-add" onclick="ouvrirModal('event')">+ Nouvel événement</button>
-
-  <div class="agenda-month">
-    <button class="btn-nav" onclick="changerMois(-1)">‹</button>
-    <h2 id="titre-mois"></h2>
-    <button class="btn-nav" onclick="changerMois(1)">›</button>
-  </div>
-  <div class="cal-grid" id="calendrier"></div>
-
-  <div class="section-title" style="font-size:1rem; margin-bottom:12px;">Événements du mois</div>
-  <div id="liste-events"></div>
-</section>
-
-<!-- ══════════ CONTACTS ══════════ -->
-<section id="section-contacts" class="section">
-  <p class="section-title">Réseau</p>
-  <p class="section-sub">Chercheurs, institutions et collaborateurs</p>
-
-  <button class="btn-add" onclick="ouvrirModal('contact')">+ Nouveau contact</button>
-
-  <div class="filtres">
-    <button class="filtre-btn active" onclick="filtrerContacts('tous')">Tous</button>
-    <button class="filtre-btn" onclick="filtrerContacts('acontacter')">À contacter</button>
-    <button class="filtre-btn" onclick="filtrerContacts('contacte')">Contactés</button>
-    <button class="filtre-btn" onclick="filtrerContacts('rencontre')">Rencontrés</button>
-  </div>
-
-  <div id="liste-contacts"></div>
-</section>
-
-<!-- ══════════ SITES ══════════ -->
-<section id="section-sites" class="section">
-  <p class="section-title">Sites archéologiques</p>
-  <p class="section-sub">Inventaire des sites au Maroc</p>
-
-  <button class="btn-add" onclick="ouvrirModal('site')">+ Nouveau site</button>
-
-  <div class="filtres" id="filtres-sites">
-    <button class="filtre-btn active" onclick="filtrerSites('tous')">Tous</button>
-    <button class="filtre-btn" onclick="filtrerSites('Tazina')">Tazina</button>
-    <button class="filtre-btn" onclick="filtrerSites('Libyco-Berbère')">Libyco-Berbère</button>
-    <button class="filtre-btn" onclick="filtrerSites('Gravure')">Gravures</button>
-    <button class="filtre-btn" onclick="filtrerSites('Peinture')">Peintures</button>
-  </div>
-
-  <div id="liste-sites"></div>
-</section>
-
-<!-- ══════════ BIBLIOGRAPHIE ══════════ -->
-<section id="section-biblio" class="section">
-  <p class="section-title">Bibliographie</p>
-  <p class="section-sub">Références liées à ta recherche</p>
-
-  <button class="btn-add" onclick="ouvrirModal('biblio')">+ Nouvelle référence</button>
-
-  <div class="filtres">
-    <button class="filtre-btn active" onclick="filtrerBiblio('tous')">Toutes</button>
-    <button class="filtre-btn" onclick="filtrerBiblio('art-rupestre')">Art rupestre</button>
-    <button class="filtre-btn" onclick="filtrerBiblio('prehistoire')">Préhistoire</button>
-    <button class="filtre-btn" onclick="filtrerBiblio('methode')">Méthode</button>
-    <button class="filtre-btn" onclick="filtrerBiblio('maroc')">Maroc</button>
-  </div>
-
-  <div id="liste-biblio"></div>
-</section>
-
-<!-- ══════════ MODALS ══════════ -->
-
-<!-- Modal Tâche -->
-<div class="modal-overlay" id="modal-tache">
-  <div class="modal">
-    <div class="modal-title" id="modal-tache-titre">Nouvelle tâche</div>
-    <div class="form-group">
-      <label>Titre</label>
-      <input type="text" id="t-titre" placeholder="Description de la tâche">
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Catégorie</label>
-        <select id="t-cat">
-          <option value="colloque">🎤 Colloque</option>
-          <option value="papier">📄 Papier</option>
-          <option value="terrain">🏜 Terrain</option>
-          <option value="asso">🤝 Association</option>
-          <option value="rdv">📞 RDV</option>
-          <option value="these">🎓 Thèse</option>
-          <option value="autre">Autre</option>
-        </select>
+  <!-- ============ BARRE SUPÉRIEURE ============ -->
+  <header class="topbar">
+    <div class="brand" onclick="go('dashboard')">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M2 20h20" stroke="#E7DBC2" stroke-width="1.5" stroke-linecap="round"/><path d="M4 20l3-9 5 3 4-7 4 13" stroke="#B85C2C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="7" r="1.6" fill="#E7DBC2"/></svg>
       </div>
-      <div class="form-group">
-        <label>Statut</label>
-        <select id="t-statut">
-          <option value="todo">À faire</option>
-          <option value="encours">En cours</option>
-          <option value="urgent">Urgent</option>
-          <option value="fait">Fait</option>
-        </select>
+      <div class="brand-txt">
+        <h1>Carnet de thèse</h1>
+        <p>Art rupestre · Maroc</p>
       </div>
     </div>
-    <div class="form-group">
-      <label>Échéance</label>
-      <input type="date" id="t-date">
+
+    <div class="search-wrap">
+      <span class="s-ico"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+      <input id="globalSearch" type="search" placeholder="Rechercher partout…" autocomplete="off" oninput="runSearch(this.value)" onfocus="runSearch(this.value)">
+      <div class="search-results" id="searchResults"></div>
     </div>
-    <div class="form-group">
-      <label>Notes</label>
-      <textarea id="t-notes" placeholder="Détails, liens, contexte…"></textarea>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="fermerModal('tache')">Annuler</button>
-      <button class="btn-primary" onclick="sauvegarderTache()">Sauvegarder</button>
-    </div>
-  </div>
+
+    <div class="topbar-spacer"></div>
+
+    <button class="icon-btn" title="Importer un JSON" onclick="importJson()">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 12l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 18v1a2 2 0 002 2h12a2 2 0 002-2v-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <button class="icon-btn" title="Exporter en JSON" onclick="exportJson()">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 4v12m0-12l-4 4m4-4l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 18v1a2 2 0 002 2h12a2 2 0 002-2v-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <button class="icon-btn" title="Réglages" onclick="openSettings()">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3m0 14v3M4.2 4.2l2.1 2.1m11.4 11.4l2.1 2.1M2 12h3m14 0h3M4.2 19.8l2.1-2.1m11.4-11.4l2.1-2.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </header>
+
+  <!-- ============ NAVIGATION (haut, desktop/tablette) ============ -->
+  <nav class="nav" id="topnav">
+    <button class="nav-item active" data-view="dashboard" onclick="go('dashboard')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12l9-8 9 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v10h14V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Tableau de bord</button>
+    <button class="nav-item" data-view="tasks" onclick="go('tasks')"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Tâches</button>
+    <button class="nav-item" data-view="agenda" onclick="go('agenda')"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18M8 3v4m8-4v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Agenda</button>
+    <button class="nav-item" data-view="contacts" onclick="go('contacts')"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 19a5.5 5.5 0 0111 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6a3 3 0 010 6m4.5 6a4.5 4.5 0 00-4-4.45" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Contacts</button>
+    <button class="nav-item" data-view="assocs" onclick="go('assocs')"><svg viewBox="0 0 24 24" fill="none"><circle cx="7" cy="9" r="2.6" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="9" r="2.6" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 19a4.5 4.5 0 019 0m1 0a4.5 4.5 0 019 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Associations</button>
+    <button class="nav-item" data-view="sites" onclick="go('sites')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.8"/></svg>Sites</button>
+  </nav>
+
+  <!-- ============ CONTENU ============ -->
+  <main class="main">
+
+    <!-- ░░░░░░░░░░ TABLEAU DE BORD ░░░░░░░░░░ -->
+    <section class="view active" id="view-dashboard">
+      <div class="view-head">
+        <div class="vh-title"><span class="eyebrow">Vue d'ensemble</span><h2 id="dashGreeting">Tableau de bord</h2></div>
+        <button class="btn btn-ghost" onclick="openQuickAdd()"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>Ajout rapide</button>
+      </div>
+      <div class="dash-grid" id="dashGrid"></div>
+    </section>
+
+    <!-- ░░░░░░░░░░ TÂCHES ░░░░░░░░░░ -->
+    <section class="view" id="view-tasks">
+      <div class="view-head">
+        <div class="vh-title"><span class="eyebrow">Calendrier de thèse</span><h2>Tâches</h2></div>
+        <button class="btn btn-accent" onclick="editTask()"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>Nouvelle tâche</button>
+      </div>
+      <div class="toolbar">
+        <div class="seg">
+          <button class="on" id="segFrise" onclick="setTaskView('frise')">Frise</button>
+          <button id="segKanban" onclick="setTaskView('kanban')">Tanks Kanban</button>
+        </div>
+        <div class="filterbar" id="taskCatFilter"></div>
+      </div>
+      <div id="taskFriseArea"></div>
+      <div id="taskKanbanArea" class="hidden"></div>
+    </section>
+
+    <!-- ░░░░░░░░░░ AGENDA ░░░░░░░░░░ -->
+    <section class="view" id="view-agenda">
+      <div class="view-head">
+        <div class="vh-title"><span class="eyebrow">Planning</span><h2>Agenda</h2></div>
+        <button class="btn btn-accent" onclick="editEvent()"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>Nouvel événement</button>
+      </div>
+      <div id="agendaArea"></div>
+    </section>
+
+    <!-- ░░░░░░░░░░ CONTACTS ░░░░░░░░░░ -->
+    <section class="view" id="view-contacts">
+      <div class="view-head">
+        <div class="vh-title"><span class="eyebrow">Carnet de réseau</span><h2>Contacts</h2></div>
+        <button class="btn btn-accent" onclick="editContact()"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>Nouveau contact</button>
+      </div>
+      <div class="toolbar"><div class="filterbar" id="contactTagFilter"></div></div>
+      <div class="grid grid-cards" id="contactsGrid"></div>
+    </section>
+
+    <!-- ░░░░░░░░░░ ASSOCIATIONS ░░░░░░░░░░ -->
+    <section class="view" id="view-assocs">
+      <div class="view-head">
+        <div class="vh-title"><span class="eyebrow">Réseau institutionnel</span><h2>Associations</h2></div>
+        <button class="btn btn-accent" onclick="editAssoc()"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>Nouvelle association</button>
+      </div>
+      <div class="toolbar"><div class="filterbar" id="assocTagFilter"></div></div>
+      <div class="grid grid-cards" id="assocsGrid"></div>
+    </section>
+
+    <!-- ░░░░░░░░░░ SITES ░░░░░░░░░░ -->
+    <section class="view" id="view-sites">
+      <div class="view-head">
+        <div class="vh-title"><span class="eyebrow">Inventaire archéologique</span><h2>Sites</h2></div>
+        <button class="btn btn-accent" onclick="editSite()"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>Nouveau site</button>
+      </div>
+      <div class="toolbar">
+        <div class="filterbar" id="siteTradFilter"></div>
+      </div>
+      <div class="grid grid-cards" id="sitesGrid"></div>
+    </section>
+
+  </main>
+
+  <!-- ============ NAV MOBILE (bas) ============ -->
+  <nav class="mobile-nav">
+    <button class="mn-item active" data-view="dashboard" onclick="go('dashboard')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12l9-8 9 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v10h14V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Accueil</button>
+    <button class="mn-item" data-view="tasks" onclick="go('tasks')"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Tâches</button>
+    <button class="mn-item" data-view="agenda" onclick="go('agenda')"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18M8 3v4m8-4v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Agenda</button>
+    <button class="mn-item" data-view="contacts" onclick="go('contacts')"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 19a5.5 5.5 0 0111 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Contacts</button>
+    <button class="mn-item" data-view="sites" onclick="go('sites')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.8"/></svg>Sites</button>
+  </nav>
+
 </div>
 
-<!-- Modal Événement -->
-<div class="modal-overlay" id="modal-event">
-  <div class="modal">
-    <div class="modal-title">Nouvel événement</div>
-    <div class="form-group">
-      <label>Titre</label>
-      <input type="text" id="e-titre" placeholder="Nom de l'événement">
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Date</label>
-        <input type="date" id="e-date">
-      </div>
-      <div class="form-group">
-        <label>Type</label>
-        <select id="e-type">
-          <option value="colloque">Colloque</option>
-          <option value="rdv">Rendez-vous</option>
-          <option value="terrain">Terrain</option>
-          <option value="soutenance">Soutenance</option>
-          <option value="deadline">Deadline</option>
-          <option value="autre">Autre</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Lieu</label>
-      <input type="text" id="e-lieu" placeholder="Ville, institution…">
-    </div>
-    <div class="form-group">
-      <label>Notes</label>
-      <textarea id="e-notes" placeholder="Programme, contacts, infos pratiques…"></textarea>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="fermerModal('event')">Annuler</button>
-      <button class="btn-primary" onclick="sauvegarderEvent()">Sauvegarder</button>
-    </div>
+<!-- ============ MODAL UNIVERSEL ============ -->
+<div class="modal-scrim" id="scrim" onclick="closeModal()"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-head">
+    <h3 id="modalTitle">—</h3>
+    <button class="icon-btn" onclick="closeModal()" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button>
   </div>
+  <div class="modal-body" id="modalBody"></div>
+  <div class="modal-foot" id="modalFoot"></div>
 </div>
 
-<!-- Modal Contact -->
-<div class="modal-overlay" id="modal-contact">
-  <div class="modal">
-    <div class="modal-title">Nouveau contact</div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Prénom</label>
-        <input type="text" id="c-prenom" placeholder="Prénom">
-      </div>
-      <div class="form-group">
-        <label>Nom</label>
-        <input type="text" id="c-nom" placeholder="Nom">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Institution / Université</label>
-      <input type="text" id="c-instit" placeholder="CNRS, Université de…">
-    </div>
-    <div class="form-group">
-      <label>Spécialité / Rôle</label>
-      <input type="text" id="c-role" placeholder="Préhistorien, archéologue rupestre…">
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="c-email" placeholder="email@…">
-      </div>
-      <div class="form-group">
-        <label>Statut</label>
-        <select id="c-statut">
-          <option value="acontacter">À contacter</option>
-          <option value="contacte">Contacté</option>
-          <option value="rencontre">Rencontré</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Articles / Publications liés</label>
-      <textarea id="c-articles" placeholder="Titre des articles, années…"></textarea>
-    </div>
-    <div class="form-group">
-      <label>Notes</label>
-      <textarea id="c-notes" placeholder="Contexte, sujets d'intérêt commun…"></textarea>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="fermerModal('contact')">Annuler</button>
-      <button class="btn-primary" onclick="sauvegarderContact()">Sauvegarder</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Site -->
-<div class="modal-overlay" id="modal-site">
-  <div class="modal">
-    <div class="modal-title">Nouveau site archéologique</div>
-    <div class="form-group">
-      <label>Nom du site</label>
-      <input type="text" id="s-nom" placeholder="Nom / toponyme">
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Région</label>
-        <input type="text" id="s-region" placeholder="Anti-Atlas, Draa…">
-      </div>
-      <div class="form-group">
-        <label>Province</label>
-        <input type="text" id="s-province" placeholder="Province marocaine">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Latitude</label>
-        <input type="number" id="s-lat" placeholder="30.xxxx" step="0.0001">
-      </div>
-      <div class="form-group">
-        <label>Longitude</label>
-        <input type="number" id="s-lon" placeholder="-8.xxxx" step="0.0001">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Traditions stylistiques</label>
-      <select id="s-tradition" multiple style="height:90px;">
-        <option value="Tazina">Tazina</option>
-        <option value="Libyco-Berbère">Libyco-Berbère</option>
-        <option value="Gravure">Gravures rupestres</option>
-        <option value="Peinture">Peintures</option>
-        <option value="Néolithique">Néolithique</option>
-      </select>
-      <small style="color:var(--gris);font-size:0.72rem;margin-top:4px;display:block;">Maintenir Ctrl/Cmd pour sélectionner plusieurs</small>
-    </div>
-    <div class="form-group">
-      <label>Période</label>
-      <input type="text" id="s-periode" placeholder="Holocène, Bronze, Néolithique…">
-    </div>
-    <div class="form-group">
-      <label>Notes</label>
-      <textarea id="s-notes" placeholder="Description, état de conservation, accès…"></textarea>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="fermerModal('site')">Annuler</button>
-      <button class="btn-primary" onclick="sauvegarderSite()">Sauvegarder</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Bibliographie -->
-<div class="modal-overlay" id="modal-biblio">
-  <div class="modal">
-    <div class="modal-title">Nouvelle référence</div>
-    <div class="form-group">
-      <label>Titre</label>
-      <textarea id="b-titre" placeholder="Titre complet de l'article/ouvrage…" style="min-height:60px;"></textarea>
-    </div>
-    <div class="form-group">
-      <label>Auteur(s)</label>
-      <input type="text" id="b-auteurs" placeholder="Nom, Prénom ; Nom, Prénom…">
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Année</label>
-        <input type="number" id="b-annee" placeholder="2023" min="1800" max="2030">
-      </div>
-      <div class="form-group">
-        <label>Type</label>
-        <select id="b-type">
-          <option value="article">Article</option>
-          <option value="ouvrage">Ouvrage</option>
-          <option value="chapitre">Chapitre</option>
-          <option value="these">Thèse</option>
-          <option value="actes">Actes de colloque</option>
-          <option value="rapport">Rapport</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Revue / Éditeur</label>
-      <input type="text" id="b-source" placeholder="Journal of African Archaeology…">
-    </div>
-    <div class="form-group">
-      <label>Mots-clés</label>
-      <input type="text" id="b-tags" placeholder="art-rupestre, maroc, prehistoire…">
-    </div>
-    <div class="form-group">
-      <label>Notes</label>
-      <textarea id="b-notes" placeholder="Résumé, intérêt pour ta thèse…"></textarea>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="fermerModal('biblio')">Annuler</button>
-      <button class="btn-primary" onclick="sauvegarderBiblio()">Sauvegarder</button>
-    </div>
-  </div>
-</div>
+<div class="toast-wrap" id="toastWrap"></div>
+<input type="file" id="fileInput" accept="application/json,.json" class="hidden">
 
 <script>
-// ══════════════════════════════════════════
-// DONNÉES
-// ══════════════════════════════════════════
-let DB = {
-  taches: [],
-  events: [],
-  contacts: [],
-  sites: [],
-  biblio: []
+/* ============================================================
+   1 · DONNÉES — schéma, stockage localStorage, utilitaires
+   ============================================================
+   Schéma JSON (version 2) :
+   {
+     version, exportedAt,
+     contacts:    [{id,nom,prenom,specialite,institution,laboratoire,mail,telephone,
+                    statutRelation,tags[],notes,siteIds[],associationIds[],createdAt}]
+     associations:[{id,nom,adresse,mail,presidentNom,presidentMail,specialite,
+                    membres[{nom,mail}],siteWeb,articles[{titre,url}],tags[],notes,
+                    contactIds[],createdAt}]
+     sites:       [{id,nom,region,province,lat,lng,traditions[],periode,notes,
+                    contactId,statut,tags[],createdAt}]
+     tasks:       [{id,titre,description,dateDebut,dateFin,statut,categorie,type,createdAt}]
+     events:      [{id,titre,date,type,lieu,notes,contactId,associationId,createdAt}]
+     tags:        [..global..]
+     traditions:  [..stylistiques..]
+     settings:    {googleClientId, anthropicKey}
+   }
+   ============================================================ */
+
+const STORE_KEY = 'these-archeo-data-v2';
+
+const TASK_STATUSES = ['À faire','En cours','Urgent','Fait'];
+const STATUS_CLASS  = {'À faire':'afaire','En cours':'encours','Urgent':'urgent','Fait':'fait'};
+const STATUS_COLOR  = {'À faire':'#9A8C76','En cours':'#B8862C','Urgent':'#C0432B','Fait':'#5C7A5E'};
+const TASK_CATS     = ['Colloque','Papier','Terrain','Association','RDV','Thèse','Autre'];
+const CAT_COLOR     = {Colloque:'#B85C2C',Papier:'#8A6312',Terrain:'#7a4f15',Association:'#5C7A5E',RDV:'#466',Thèse:'#1C1917',Autre:'#9A8C76'};
+const EVENT_TYPES   = ['colloque','rdv','terrain','deadline','soutenance','autre'];
+const EVENT_LABEL   = {colloque:'Colloque',rdv:'RDV',terrain:'Terrain',deadline:'Deadline',soutenance:'Soutenance',autre:'Autre'};
+const SITE_STATUSES = ['Prospecté','À prospecter','En cours d\u2019étude'];
+const CONTACT_REL   = ['Rencontré','En attente','À revoir'];
+const DEFAULT_TRADITIONS = ['Tazina','Libyco-Berbère','Gravures rupestres','Peintures','Néolithique'];
+
+let DB = null;
+
+function emptyDB(){
+  return {version:2, exportedAt:null, contacts:[], associations:[], sites:[],
+          tasks:[], events:[], tags:[], traditions:[...DEFAULT_TRADITIONS],
+          settings:{googleClientId:'', anthropicKey:''}};
+}
+
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw){ DB = Object.assign(emptyDB(), JSON.parse(raw)); }
+    else{ DB = emptyDB(); seedExample(); save(); }
+  }catch(e){ console.error('Lecture localStorage', e); DB = emptyDB(); }
+  if(!DB.traditions || !DB.traditions.length) DB.traditions = [...DEFAULT_TRADITIONS];
+  if(!DB.settings) DB.settings = {googleClientId:'', anthropicKey:''};
+}
+function save(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(DB)); }
+  catch(e){ toast('Stockage saturé — exportez vos données','err'); }
+}
+
+/* ---- utilitaires ---- */
+const $  = id => document.getElementById(id);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+const JOURS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+function todayISO(){ const d=new Date(); return d.toISOString().slice(0,10); }
+function isoToFr(iso){ if(!iso) return '—'; const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; }
+function isoToShort(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}/${m}`; }
+function monthLabel(d){ return `${MOIS[d.getMonth()]} ${d.getFullYear()}`; }
+function dim(y,m){ return new Date(y,m+1,0).getDate(); } // jours du mois
+function firstDow(y,m){ return (new Date(y,m,1).getDay()+6)%7; } // lundi=0
+
+function toast(msg,type){
+  const w=$('toastWrap'); const t=document.createElement('div');
+  t.className='toast '+(type==='err'?'err':type==='ok'?'ok':'');
+  t.innerHTML=(type==='ok'?'<span class="ti">✓</span>':'')+esc(msg);
+  w.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300);},2600);
+}
+
+/* ---- lookups ---- */
+const getContact = id => DB.contacts.find(c=>c.id===id);
+const getAssoc   = id => DB.associations.find(a=>a.id===id);
+const getSite    = id => DB.sites.find(s=>s.id===id);
+const contactName = c => c ? `${c.prenom||''} ${c.nom||''}`.trim()||'(sans nom)' : '—';
+
+/* ---- état de navigation / filtres ---- */
+const state = {
+  view:'dashboard', taskView:'frise',
+  taskMonth:new Date(new Date().getFullYear(),new Date().getMonth(),1),
+  taskCat:'all',
+  agendaMonth:new Date(new Date().getFullYear(),new Date().getMonth(),1),
+  contactTag:null, assocTag:null, siteTrad:null,
+  editType:null, editId:null,
+  detailType:null, detailId:null,
 };
 
-let editIndex = { tache: null, event: null, contact: null, site: null, biblio: null };
-let moisCourant = new Date();
-let filtreActif = { taches: 'tous', contacts: 'tous', sites: 'tous', biblio: 'tous' };
-
-// ── INIT ──
-function init() {
-  const saved = localStorage.getItem('these-archeo-db');
-  if (saved) {
-    try { DB = JSON.parse(saved); } catch(e) {}
-  }
-  // Assurer les tableaux
-  ['taches','events','contacts','sites','biblio'].forEach(k => {
-    if (!DB[k]) DB[k] = [];
-  });
-  rafraichirTout();
+/* ============================================================
+   Navigation entre vues
+   ============================================================ */
+function go(view){
+  state.view=view;
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active', v.id==='view-'+view));
+  document.querySelectorAll('.nav-item,.mn-item').forEach(n=>n.classList.toggle('active', n.dataset.view===view));
+  closeSearch();
+  window.scrollTo({top:0,behavior:'smooth'});
+  render(view);
 }
-
-function sauvegarder() {
-  localStorage.setItem('these-archeo-db', JSON.stringify(DB));
+function render(view){
+  if(view==='dashboard') renderDashboard();
+  else if(view==='tasks') renderTasks();
+  else if(view==='agenda') renderAgenda();
+  else if(view==='contacts') renderContacts();
+  else if(view==='assocs') renderAssocs();
+  else if(view==='sites') renderSites();
 }
-
-function rafraichirTout() {
-  renderTaches();
-  renderEvents();
-  renderCalendrier();
-  renderContacts();
-  renderSites();
-  renderBiblio();
-  renderTableau();
-  updateBadges();
-}
-
-// ══════════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════════
-function changerSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('section-' + id).classList.add('active');
-  event.currentTarget.classList.add('active');
-  if (id === 'agenda') renderCalendrier();
-}
-
-function updateBadges() {
-  const actives = DB.taches.filter(t => t.statut !== 'fait').length;
-  document.getElementById('badge-taches').textContent = actives;
-}
-
-// ══════════════════════════════════════════
-// MODALS
-// ══════════════════════════════════════════
-function ouvrirModal(type, index) {
-  editIndex[type] = index !== undefined ? index : null;
-  const overlay = document.getElementById('modal-' + type);
-  overlay.classList.add('open');
-
-  if (type === 'tache' && index !== undefined) {
-    const t = DB.taches[index];
-    document.getElementById('modal-tache-titre').textContent = 'Modifier la tâche';
-    document.getElementById('t-titre').value = t.titre;
-    document.getElementById('t-cat').value = t.cat;
-    document.getElementById('t-statut').value = t.statut;
-    document.getElementById('t-date').value = t.date || '';
-    document.getElementById('t-notes').value = t.notes || '';
-  } else if (type === 'tache') {
-    document.getElementById('modal-tache-titre').textContent = 'Nouvelle tâche';
-    ['t-titre','t-date','t-notes'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('t-cat').value = 'colloque';
-    document.getElementById('t-statut').value = 'todo';
-  }
-  if (type === 'contact' && index !== undefined) {
-    const c = DB.contacts[index];
-    document.getElementById('c-prenom').value = c.prenom;
-    document.getElementById('c-nom').value = c.nom;
-    document.getElementById('c-instit').value = c.instit || '';
-    document.getElementById('c-role').value = c.role || '';
-    document.getElementById('c-email').value = c.email || '';
-    document.getElementById('c-statut').value = c.statut;
-    document.getElementById('c-articles').value = c.articles || '';
-    document.getElementById('c-notes').value = c.notes || '';
-  } else if (type === 'contact') {
-    ['c-prenom','c-nom','c-instit','c-role','c-email','c-articles','c-notes'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('c-statut').value = 'acontacter';
-  }
-  if (type === 'site' && index !== undefined) {
-    const s = DB.sites[index];
-    document.getElementById('s-nom').value = s.nom;
-    document.getElementById('s-region').value = s.region || '';
-    document.getElementById('s-province').value = s.province || '';
-    document.getElementById('s-lat').value = s.lat || '';
-    document.getElementById('s-lon').value = s.lon || '';
-    document.getElementById('s-periode').value = s.periode || '';
-    document.getElementById('s-notes').value = s.notes || '';
-    // traditions
-    const sel = document.getElementById('s-tradition');
-    const trads = s.traditions || [];
-    for (let opt of sel.options) opt.selected = trads.includes(opt.value);
-  } else if (type === 'site') {
-    ['s-nom','s-region','s-province','s-lat','s-lon','s-periode','s-notes'].forEach(id => document.getElementById(id).value = '');
-    const sel = document.getElementById('s-tradition');
-    for (let opt of sel.options) opt.selected = false;
-  }
-  if (type === 'biblio' && index !== undefined) {
-    const b = DB.biblio[index];
-    document.getElementById('b-titre').value = b.titre;
-    document.getElementById('b-auteurs').value = b.auteurs;
-    document.getElementById('b-annee').value = b.annee || '';
-    document.getElementById('b-type').value = b.type || 'article';
-    document.getElementById('b-source').value = b.source || '';
-    document.getElementById('b-tags').value = b.tags || '';
-    document.getElementById('b-notes').value = b.notes || '';
-  } else if (type === 'biblio') {
-    ['b-titre','b-auteurs','b-annee','b-source','b-tags','b-notes'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('b-type').value = 'article';
-  }
-}
-
-function fermerModal(type) {
-  document.getElementById('modal-' + type).classList.remove('open');
-  editIndex[type] = null;
-}
-
-// Fermer en cliquant l'overlay
-document.querySelectorAll('.modal-overlay').forEach(o => {
-  o.addEventListener('click', function(e) {
-    if (e.target === this) {
-      const type = this.id.replace('modal-','');
-      fermerModal(type);
-    }
-  });
-});
-
-// ══════════════════════════════════════════
-// TÂCHES
-// ══════════════════════════════════════════
-function sauvegarderTache() {
-  const titre = document.getElementById('t-titre').value.trim();
-  if (!titre) return alert('Titre requis');
-  const tache = {
-    id: editIndex.tache !== null ? DB.taches[editIndex.tache].id : Date.now(),
-    titre,
-    cat: document.getElementById('t-cat').value,
-    statut: document.getElementById('t-statut').value,
-    date: document.getElementById('t-date').value,
-    notes: document.getElementById('t-notes').value.trim(),
-    cree: editIndex.tache !== null ? DB.taches[editIndex.tache].cree : new Date().toISOString()
-  };
-  if (editIndex.tache !== null) DB.taches[editIndex.tache] = tache;
-  else DB.taches.unshift(tache);
-  sauvegarder();
-  fermerModal('tache');
-  renderTaches();
-  renderTableau();
-  updateBadges();
-}
-
-function supprimerTache(i) {
-  if (confirm('Supprimer cette tâche ?')) {
-    DB.taches.splice(i, 1);
-    sauvegarder();
-    renderTaches();
-    renderTableau();
-    updateBadges();
-  }
-}
-
-function toggleStatutTache(i) {
-  const t = DB.taches[i];
-  const cycle = ['todo','encours','urgent','fait'];
-  t.statut = cycle[(cycle.indexOf(t.statut) + 1) % cycle.length];
-  sauvegarder();
-  renderTaches();
-  renderTableau();
-  updateBadges();
-}
-
-function filtrerTaches(cat) {
-  filtreActif.taches = cat;
-  document.querySelectorAll('#filtres-taches .filtre-btn').forEach(b => b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  renderTaches();
-}
-
-function renderTaches() {
-  const el = document.getElementById('liste-taches');
-  let taches = [...DB.taches];
-  if (filtreActif.taches !== 'tous') taches = taches.filter(t => t.cat === filtreActif.taches);
-  if (!taches.length) {
-    el.innerHTML = '<div class="empty-state"><div class="icon">✓</div><p>Aucune tâche pour l\'instant.<br>Crée ta première tâche ci-dessus.</p></div>';
-    return;
-  }
-  const statutLabel = { todo: 'À faire', encours: 'En cours', urgent: 'Urgent !', fait: 'Fait' };
-  el.innerHTML = taches.map((t, i) => {
-    const realIdx = DB.taches.indexOf(t);
-    const tagClass = `tag-${t.cat}`;
-    const icons = { colloque:'🎤', papier:'📄', terrain:'🏜', asso:'🤝', rdv:'📞', these:'🎓', autre:'•' };
-    const dateStr = t.date ? `Échéance : ${formatDate(t.date)}` : '';
-    return `<div class="card">
-      <div class="card-header">
-        <div style="display:flex;gap:10px;align-items:flex-start;flex:1">
-          <div class="statut-dot statut-${t.statut}" style="cursor:pointer;margin-top:5px;" onclick="toggleStatutTache(${realIdx})" title="Changer le statut"></div>
-          <div style="flex:1">
-            <div class="card-title" style="${t.statut==='fait'?'text-decoration:line-through;opacity:0.6':''}">${t.titre}</div>
-            <div class="card-meta">
-              <span class="tag ${tagClass}">${icons[t.cat]||'•'} ${t.cat}</span>
-              ${dateStr ? `<span style="margin-left:8px;">${dateStr}</span>` : ''}
-              <br><small style="font-style:italic;">${statutLabel[t.statut]}</small>
-            </div>
-            ${t.notes ? `<div style="font-size:0.78rem;color:var(--encre-douce);margin-top:6px;padding-top:6px;border-top:1px solid var(--gris-clair);">${t.notes}</div>` : ''}
-          </div>
-        </div>
-        <div class="card-actions">
-          <button class="btn-icon" onclick="ouvrirModal('tache', ${realIdx})">✏️</button>
-          <button class="btn-icon danger" onclick="supprimerTache(${realIdx})">✕</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ══════════════════════════════════════════
-// ÉVÉNEMENTS / AGENDA
-// ══════════════════════════════════════════
-function sauvegarderEvent() {
-  const titre = document.getElementById('e-titre').value.trim();
-  const date = document.getElementById('e-date').value;
-  if (!titre || !date) return alert('Titre et date requis');
-  const ev = {
-    id: Date.now(),
-    titre,
-    date,
-    type: document.getElementById('e-type').value,
-    lieu: document.getElementById('e-lieu').value.trim(),
-    notes: document.getElementById('e-notes').value.trim()
-  };
-  DB.events.push(ev);
-  DB.events.sort((a, b) => a.date.localeCompare(b.date));
-  sauvegarder();
-  fermerModal('event');
-  renderCalendrier();
-  renderEvents();
-  renderTableau();
-}
-
-function supprimerEvent(i) {
-  if (confirm('Supprimer cet événement ?')) {
-    DB.events.splice(i, 1);
-    sauvegarder();
-    renderCalendrier();
-    renderEvents();
-    renderTableau();
-  }
-}
-
-function changerMois(delta) {
-  moisCourant = new Date(moisCourant.getFullYear(), moisCourant.getMonth() + delta, 1);
-  renderCalendrier();
-  renderEvents();
-}
-
-function renderCalendrier() {
-  const mois = moisCourant.getMonth();
-  const an = moisCourant.getFullYear();
-  const noms = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-  document.getElementById('titre-mois').textContent = `${noms[mois]} ${an}`;
-
-  const premier = new Date(an, mois, 1);
-  const dernier = new Date(an, mois + 1, 0);
-  let jourDebut = premier.getDay(); if (jourDebut === 0) jourDebut = 7;
-  const aujourd = new Date().toISOString().split('T')[0];
-  const datesEvents = DB.events.map(e => e.date);
-
-  let html = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'].map(j => `<div class="cal-day-header">${j}</div>`).join('');
-
-  for (let i = 1; i < jourDebut; i++) {
-    const d = new Date(an, mois, 1 - (jourDebut - i));
-    html += `<div class="cal-day other-month">${d.getDate()}</div>`;
-  }
-  for (let d = 1; d <= dernier.getDate(); d++) {
-    const dateStr = `${an}-${String(mois+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday = dateStr === aujourd;
-    const hasEv = datesEvents.includes(dateStr);
-    html += `<div class="cal-day${isToday?' today':''}${hasEv?' has-event':''}">${d}</div>`;
-  }
-  document.getElementById('calendrier').innerHTML = html;
-}
-
-function renderEvents() {
-  const el = document.getElementById('liste-events');
-  const mois = moisCourant.getMonth();
-  const an = moisCourant.getFullYear();
-  const prefix = `${an}-${String(mois+1).padStart(2,'0')}`;
-  const evs = DB.events.filter(e => e.date.startsWith(prefix));
-  if (!evs.length) {
-    el.innerHTML = '<div class="empty-state"><div class="icon">📅</div><p>Aucun événement ce mois-ci.</p></div>';
-    return;
-  }
-  el.innerHTML = evs.map(e => {
-    const i = DB.events.indexOf(e);
-    const date = new Date(e.date + 'T00:00:00');
-    const moisNoms = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-    return `<div class="event-item">
-      <div class="event-date-block">
-        <div class="event-day">${date.getDate()}</div>
-        <div class="event-month">${moisNoms[date.getMonth()]}</div>
-      </div>
-      <div class="event-content">
-        <div class="event-title">${e.titre}</div>
-        <div class="event-meta">${e.type}${e.lieu ? ' · ' + e.lieu : ''}${e.notes ? '<br>' + e.notes : ''}</div>
-      </div>
-      <button class="btn-icon danger" onclick="supprimerEvent(${i})" style="align-self:flex-start">✕</button>
-    </div>`;
-  }).join('');
-}
-
-// ══════════════════════════════════════════
-// CONTACTS
-// ══════════════════════════════════════════
-function sauvegarderContact() {
-  const prenom = document.getElementById('c-prenom').value.trim();
-  const nom = document.getElementById('c-nom').value.trim();
-  if (!nom) return alert('Nom requis');
-  const contact = {
-    id: editIndex.contact !== null ? DB.contacts[editIndex.contact].id : Date.now(),
-    prenom, nom,
-    instit: document.getElementById('c-instit').value.trim(),
-    role: document.getElementById('c-role').value.trim(),
-    email: document.getElementById('c-email').value.trim(),
-    statut: document.getElementById('c-statut').value,
-    articles: document.getElementById('c-articles').value.trim(),
-    notes: document.getElementById('c-notes').value.trim()
-  };
-  if (editIndex.contact !== null) DB.contacts[editIndex.contact] = contact;
-  else DB.contacts.unshift(contact);
-  sauvegarder();
-  fermerModal('contact');
-  renderContacts();
-  renderTableau();
-}
-
-function supprimerContact(i) {
-  if (confirm('Supprimer ce contact ?')) {
-    DB.contacts.splice(i, 1);
-    sauvegarder();
-    renderContacts();
-    renderTableau();
-  }
-}
-
-function filtrerContacts(statut) {
-  filtreActif.contacts = statut;
-  document.querySelectorAll('#section-contacts .filtre-btn').forEach(b => b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  renderContacts();
-}
-
-function renderContacts() {
-  const el = document.getElementById('liste-contacts');
-  let contacts = [...DB.contacts];
-  if (filtreActif.contacts !== 'tous') contacts = contacts.filter(c => c.statut === filtreActif.contacts);
-  if (!contacts.length) {
-    el.innerHTML = '<div class="empty-state"><div class="icon">👥</div><p>Aucun contact enregistré.<br>Construis ton réseau de chercheurs.</p></div>';
-    return;
-  }
-  const statutLabels = { acontacter: 'À contacter', contacte: 'Contacté', rencontre: 'Rencontré' };
-  el.innerHTML = contacts.map(c => {
-    const realIdx = DB.contacts.indexOf(c);
-    const initiales = `${c.prenom ? c.prenom[0] : ''}${c.nom[0]}`.toUpperCase();
-    return `<div class="contact-card">
-      <div class="contact-avatar">${initiales}</div>
-      <div class="contact-info" style="flex:1">
-        <div class="contact-name">${c.prenom} ${c.nom}</div>
-        <div class="contact-role">${c.role || ''} ${c.instit ? '· ' + c.instit : ''}</div>
-        <div class="contact-details">
-          ${c.email ? `📧 ${c.email}` : ''}
-          ${c.articles ? `<br>📄 ${c.articles}` : ''}
-          ${c.notes ? `<br><em>${c.notes}</em>` : ''}
-        </div>
-        <span class="contact-statut statut-${c.statut}">${statutLabels[c.statut]}</span>
-      </div>
-      <div class="card-actions" style="flex-direction:column;">
-        <button class="btn-icon" onclick="ouvrirModal('contact', ${realIdx})">✏️</button>
-        <button class="btn-icon danger" onclick="supprimerContact(${realIdx})">✕</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ══════════════════════════════════════════
-// SITES
-// ══════════════════════════════════════════
-function sauvegarderSite() {
-  const nom = document.getElementById('s-nom').value.trim();
-  if (!nom) return alert('Nom requis');
-  const sel = document.getElementById('s-tradition');
-  const traditions = Array.from(sel.selectedOptions).map(o => o.value);
-  const site = {
-    id: editIndex.site !== null ? DB.sites[editIndex.site].id : Date.now(),
-    nom,
-    region: document.getElementById('s-region').value.trim(),
-    province: document.getElementById('s-province').value.trim(),
-    lat: document.getElementById('s-lat').value,
-    lon: document.getElementById('s-lon').value,
-    traditions,
-    periode: document.getElementById('s-periode').value.trim(),
-    notes: document.getElementById('s-notes').value.trim()
-  };
-  if (editIndex.site !== null) DB.sites[editIndex.site] = site;
-  else DB.sites.unshift(site);
-  sauvegarder();
-  fermerModal('site');
-  renderSites();
-  renderTableau();
-}
-
-function supprimerSite(i) {
-  if (confirm('Supprimer ce site ?')) {
-    DB.sites.splice(i, 1);
-    sauvegarder();
-    renderSites();
-    renderTableau();
-  }
-}
-
-function filtrerSites(trad) {
-  filtreActif.sites = trad;
-  document.querySelectorAll('#filtres-sites .filtre-btn').forEach(b => b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  renderSites();
-}
-
-function renderSites() {
-  const el = document.getElementById('liste-sites');
-  let sites = [...DB.sites];
-  if (filtreActif.sites !== 'tous') sites = sites.filter(s => (s.traditions||[]).includes(filtreActif.sites));
-  if (!sites.length) {
-    el.innerHTML = '<div class="empty-state"><div class="icon">🗺</div><p>Aucun site enregistré.<br>Ajoute tes sites archéologiques marocains.</p></div>';
-    return;
-  }
-  const tradClass = { 'Tazina':'trad-tazina', 'Libyco-Berbère':'trad-libyco', 'Gravure':'trad-gravure', 'Peinture':'trad-peinture', 'Néolithique':'trad-neolithique' };
-  el.innerHTML = sites.map(s => {
-    const realIdx = DB.sites.indexOf(s);
-    const trads = (s.traditions||[]).map(t => `<span class="tradition-badge ${tradClass[t]||''}">${t}</span>`).join('');
-    const coords = (s.lat && s.lon) ? `${parseFloat(s.lat).toFixed(4)}° N, ${parseFloat(s.lon).toFixed(4)}° E` : '';
-    return `<div class="site-card">
-      <div class="card-header">
-        <div style="flex:1">
-          <div class="site-header">
-            <span class="site-icon">🗿</span>
-            <div>
-              <div class="site-name">${s.nom}</div>
-              <div class="site-region">${s.region || ''}${s.province ? ' · ' + s.province : ''}${coords ? ' · ' + coords : ''}</div>
-            </div>
-          </div>
-          <div class="site-tags">${trads}</div>
-          ${s.periode ? `<div style="font-size:0.75rem;color:var(--gris);margin-top:5px;">Période : ${s.periode}</div>` : ''}
-          ${s.notes ? `<div style="font-size:0.78rem;color:var(--encre-douce);margin-top:6px;">${s.notes}</div>` : ''}
-        </div>
-        <div class="card-actions">
-          <button class="btn-icon" onclick="ouvrirModal('site', ${realIdx})">✏️</button>
-          <button class="btn-icon danger" onclick="supprimerSite(${realIdx})">✕</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ══════════════════════════════════════════
-// BIBLIOGRAPHIE
-// ══════════════════════════════════════════
-function sauvegarderBiblio() {
-  const titre = document.getElementById('b-titre').value.trim();
-  const auteurs = document.getElementById('b-auteurs').value.trim();
-  if (!titre) return alert('Titre requis');
-  const ref = {
-    id: editIndex.biblio !== null ? DB.biblio[editIndex.biblio].id : Date.now(),
-    titre, auteurs,
-    annee: document.getElementById('b-annee').value,
-    type: document.getElementById('b-type').value,
-    source: document.getElementById('b-source').value.trim(),
-    tags: document.getElementById('b-tags').value.trim(),
-    notes: document.getElementById('b-notes').value.trim()
-  };
-  if (editIndex.biblio !== null) DB.biblio[editIndex.biblio] = ref;
-  else DB.biblio.unshift(ref);
-  sauvegarder();
-  fermerModal('biblio');
-  renderBiblio();
-  renderTableau();
-}
-
-function supprimerBiblio(i) {
-  if (confirm('Supprimer cette référence ?')) {
-    DB.biblio.splice(i, 1);
-    sauvegarder();
-    renderBiblio();
-    renderTableau();
-  }
-}
-
-function filtrerBiblio(tag) {
-  filtreActif.biblio = tag;
-  document.querySelectorAll('#section-biblio .filtre-btn').forEach(b => b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  renderBiblio();
-}
-
-function renderBiblio() {
-  const el = document.getElementById('liste-biblio');
-  let refs = [...DB.biblio];
-  if (filtreActif.biblio !== 'tous') {
-    refs = refs.filter(b => (b.tags||'').toLowerCase().includes(filtreActif.biblio));
-  }
-  if (!refs.length) {
-    el.innerHTML = '<div class="empty-state"><div class="icon">📚</div><p>Aucune référence enregistrée.<br>Commence ta bibliographie de thèse.</p></div>';
-    return;
-  }
-  const typeIcons = { article:'📄', ouvrage:'📗', chapitre:'📑', these:'🎓', actes:'🎤', rapport:'📋' };
-  el.innerHTML = refs.map(b => {
-    const realIdx = DB.biblio.indexOf(b);
-    const tags = (b.tags||'').split(',').filter(t=>t.trim()).map(t => `<span class="tag tag-terrain" style="font-size:0.65rem;">${t.trim()}</span>`).join('');
-    return `<div class="biblio-card">
-      <div class="card-header">
-        <div style="flex:1">
-          <div class="biblio-title">${typeIcons[b.type]||'•'} ${b.titre}</div>
-          <div class="biblio-authors">${b.auteurs}${b.annee ? ' (' + b.annee + ')' : ''}</div>
-          <div class="biblio-source">${b.source || ''}</div>
-          <div class="biblio-tags">${tags}</div>
-          ${b.notes ? `<div style="font-size:0.75rem;color:var(--encre-douce);margin-top:5px;font-style:italic;">${b.notes}</div>` : ''}
-        </div>
-        <div class="card-actions">
-          <button class="btn-icon" onclick="ouvrirModal('biblio', ${realIdx})">✏️</button>
-          <button class="btn-icon danger" onclick="supprimerBiblio(${realIdx})">✕</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ══════════════════════════════════════════
-// TABLEAU DE BORD
-// ══════════════════════════════════════════
-function renderTableau() {
-  // Stats
-  document.getElementById('stat-taches').textContent = DB.taches.filter(t=>t.statut!=='fait').length;
-  document.getElementById('stat-events').textContent = DB.events.length;
-  document.getElementById('stat-contacts').textContent = DB.contacts.length;
-  document.getElementById('stat-sites').textContent = DB.sites.length;
-
-  // Tanks
-  const tanks = [
-    { id:'colloque', icon:'🎤', label:'Colloques', cat:'colloque' },
-    { id:'papier', icon:'📄', label:'Papiers', cat:'papier' },
-    { id:'terrain', icon:'🏜', label:'Terrain', cat:'terrain' },
-    { id:'asso', icon:'🤝', label:'Associations', cat:'asso' },
-    { id:'rdv', icon:'📞', label:'Rendez-vous', cat:'rdv' },
-    { id:'these', icon:'🎓', label:'Thèse', cat:'these' },
+function renderCurrent(){ render(state.view); }
+/* ============================================================
+   2 · DONNÉES D'EXEMPLE (au premier lancement)
+   ============================================================ */
+function seedExample(){
+  const cId1=uid(), cId2=uid();
+  const aId1=uid();
+  const sId1=uid(), sId2=uid(), sId3=uid();
+  DB.tags = ['préhistoire','Maroc','rupestre','néolithique','géologie','funéraire'];
+  DB.contacts = [
+    {id:cId1,nom:'El Amrani',prenom:'Mohamed',specialite:'Art rupestre, gravures',
+     institution:'Université Cadi Ayyad, Marrakech',laboratoire:'Lab. Préhistoire & Quaternaire',
+     mail:'m.elamrani@example.ma',telephone:'+212 6 00 00 00 00',statutRelation:'Rencontré',
+     tags:['rupestre','Maroc','préhistoire'],notes:'Responsable de la mission Anti-Atlas. Très disponible.',
+     siteIds:[sId1,sId2],associationIds:[aId1],createdAt:todayISO()},
+    {id:cId2,nom:'Benali',prenom:'Aïcha',specialite:'Géomorphologie',
+     institution:'INSAP, Rabat',laboratoire:'',mail:'a.benali@example.ma',telephone:'',
+     statutRelation:'À revoir',tags:['géologie','Maroc'],notes:'Contact pour datations.',
+     siteIds:[sId3],associationIds:[],createdAt:todayISO()},
   ];
-  const container = document.getElementById('tanks-container');
-  container.innerHTML = tanks.map(tank => {
-    const items = DB.taches.filter(t => t.cat === tank.cat && t.statut !== 'fait');
-    const count = items.length;
-    const itemsHtml = items.slice(0,4).map(t => {
-      return `<div class="tank-item ${t.statut}" onclick="changerSection('taches')">
-        ${t.titre}
-        ${t.date ? `<div class="tank-item-date">📅 ${formatDate(t.date)}</div>` : ''}
-      </div>`;
-    }).join('');
-    const plus = items.length > 4 ? `<div style="font-size:0.72rem;color:var(--gris);text-align:center;padding:4px;">+${items.length-4} de plus</div>` : '';
-    return `<div class="tank">
-      <div class="tank-header">
-        <div class="tank-title"><span class="tank-icon">${tank.icon}</span>${tank.label}</div>
-        <span class="tank-count">${count}</span>
+  DB.associations = [
+    {id:aId1,nom:'Association pour la sauvegarde de l\u2019art rupestre',adresse:'Rue de l\u2019Atlas, Tata',
+     mail:'contact@asar.example.ma',presidentNom:'Mohamed El Amrani',presidentMail:'m.elamrani@example.ma',
+     specialite:'Conservation des gravures rupestres',
+     membres:[{nom:'Mohamed El Amrani',mail:'m.elamrani@example.ma'},{nom:'Yacine Touré',mail:'y.toure@example.ma'}],
+     siteWeb:'https://example.ma',articles:[{titre:'Inventaire 2024 des stations de Tata',url:'https://example.ma/inv'}],
+     tags:['rupestre','Maroc'],notes:'Organise des missions de relevé annuelles.',
+     contactIds:[cId1],createdAt:todayISO()},
+  ];
+  DB.sites = [
+    {id:sId1,nom:'Oued Tata',region:'Anti-Atlas',province:'Tata',lat:29.7440,lng:-7.9720,
+     traditions:['Tazina','Gravures rupestres'],periode:'Holocène',
+     notes:'Importante concentration de gravures animalières de style Tazina.',
+     contactId:cId1,statut:'En cours d\u2019étude',tags:['rupestre'],createdAt:todayISO()},
+    {id:sId2,nom:'Foum Chenna',region:'Vallée du Draa',province:'Zagora',lat:30.5000,lng:-5.8000,
+     traditions:['Libyco-Berbère','Gravures rupestres'],periode:'Protohistoire',
+     notes:'Panneaux de cavaliers et inscriptions libyco-berbères.',
+     contactId:cId1,statut:'Prospecté',tags:['rupestre'],createdAt:todayISO()},
+    {id:sId3,nom:'Ifri n\u2019Ammar',region:'Rif oriental',province:'Nador',lat:35.0000,lng:-3.4000,
+     traditions:['Néolithique'],periode:'Néolithique',
+     notes:'Site stratifié, séquence néolithique de référence.',
+     contactId:cId2,statut:'À prospecter',tags:['néolithique'],createdAt:todayISO()},
+  ];
+  const y=new Date().getFullYear(), m=new Date().getMonth();
+  const pad=n=>String(n).padStart(2,'0');
+  DB.tasks = [
+    {id:uid(),titre:'Rendre l\u2019état de l\u2019art',description:'Première version complète du chapitre 1.',
+     dateDebut:`${y}-${pad(m+1)}-03`,dateFin:`${y}-${pad(m+1)}-14`,statut:'En cours',categorie:'Thèse',type:'fixe',createdAt:todayISO()},
+    {id:uid(),titre:'Dépouiller relevés Foum Chenna',description:'',
+     dateDebut:`${y}-${pad(m+1)}-08`,dateFin:`${y}-${pad(m+1)}-10`,statut:'À faire',categorie:'Terrain',type:'precise',createdAt:todayISO()},
+    {id:uid(),titre:'Préparer communication colloque',description:'Résumé à soumettre.',
+     dateDebut:`${y}-${pad(m+1)}-18`,dateFin:`${y}-${pad(m+1)}-20`,statut:'Urgent',categorie:'Colloque',type:'precise',createdAt:todayISO()},
+  ];
+  DB.events = [
+    {id:uid(),titre:'RDV M. El Amrani',date:`${y}-${pad(m+1)}-12`,type:'rdv',lieu:'Marrakech',
+     notes:'Point sur la mission.',contactId:cId1,associationId:'',createdAt:todayISO()},
+    {id:uid(),titre:'Colloque art rupestre',date:`${y}-${pad(m+1)}-22`,type:'colloque',lieu:'Rabat',
+     notes:'',contactId:'',associationId:aId1,createdAt:todayISO()},
+  ];
+}
+
+/* ============================================================
+   3 · MODAL — ouverture / fermeture
+   ============================================================ */
+function openModal(title, bodyHtml, footHtml){
+  $('modalTitle').innerHTML=title;
+  $('modalBody').innerHTML=bodyHtml;
+  $('modalFoot').innerHTML=footHtml||'';
+  $('scrim').classList.add('open');
+  $('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  $('scrim').classList.remove('open');
+  $('modal').classList.remove('open');
+  document.body.style.overflow='';
+  state.editType=null; state.editId=null;
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeModal(); closeSearch(); }});
+
+/* ============================================================
+   4 · OUTILS DE FORMULAIRE PARTAGÉS
+   ============================================================ */
+/* éditeur de tags réutilisable : renvoie le HTML, gère un tableau temporaire */
+let _formTags = [];
+function tagEditor(current, pool){
+  _formTags = [...(current||[])];
+  const suggestions = [...new Set([...(pool||DB.tags), ...DB.tags])].filter(t=>!_formTags.includes(t));
+  return `<div class="tag-input-wrap">
+    <div class="tags" id="ftTags">${_formTags.map(t=>tagPill(t)).join('')}</div>
+    <input id="ftInput" placeholder="Ajouter une étiquette + Entrée" onkeydown="if(event.key==='Enter'){event.preventDefault();addFormTag(this.value);this.value='';}">
+    <div class="tag-suggest" id="ftSuggest">${suggestions.slice(0,12).map(t=>`<span class="tag" onclick="addFormTag('${esc(t)}')">＋ ${esc(t)}</span>`).join('')}</div>
+  </div>`;
+}
+function tagPill(t){ return `<span class="tag tag-x" onclick="removeFormTag('${esc(t)}')">#${esc(t)} <span class="x">×</span></span>`; }
+function addFormTag(t){ t=t.trim().replace(/^#/,''); if(!t||_formTags.includes(t))return; _formTags.push(t); $('ftTags').innerHTML=_formTags.map(tagPill).join(''); const s=$('ftSuggest'); if(s){const el=[...s.children].find(c=>c.textContent.includes(t)); if(el)el.remove();} }
+function removeFormTag(t){ _formTags=_formTags.filter(x=>x!==t); $('ftTags').innerHTML=_formTags.map(tagPill).join(''); }
+
+/* multi-sélecteur de traditions stylistiques (sites) */
+let _formTrad=[];
+function tradEditor(current){
+  _formTrad=[...(current||[])];
+  const all=[...new Set([...DB.traditions, ..._formTrad])];
+  return `<div class="tag-input-wrap">
+    <div class="tags" id="trTags">${all.map(t=>`<span class="tag ${_formTrad.includes(t)?'sel':''}" onclick="toggleTrad('${esc(t)}')">${esc(t)}</span>`).join('')}</div>
+    <input id="trInput" placeholder="Créer une tradition + Entrée" onkeydown="if(event.key==='Enter'){event.preventDefault();createTrad(this.value);this.value='';}">
+  </div>`;
+}
+function toggleTrad(t){ if(_formTrad.includes(t))_formTrad=_formTrad.filter(x=>x!==t); else _formTrad.push(t); refreshTrad(); }
+function createTrad(t){ t=t.trim(); if(!t)return; if(!DB.traditions.includes(t))DB.traditions.push(t); if(!_formTrad.includes(t))_formTrad.push(t); refreshTrad(); }
+function refreshTrad(){ const all=[...new Set([...DB.traditions,..._formTrad])]; $('trTags').innerHTML=all.map(t=>`<span class="tag ${_formTrad.includes(t)?'sel':''}" onclick="toggleTrad('${esc(t)}')">${esc(t)}</span>`).join(''); }
+
+/* enregistre globalement les nouveaux tags */
+function commitTags(arr){ arr.forEach(t=>{ if(!DB.tags.includes(t)) DB.tags.push(t); }); }
+
+function selectField(label, id, options, value, extra){
+  return `<div class="field"><label>${label}</label><select id="${id}" ${extra||''}>${options.map(o=>{
+    const v=typeof o==='object'?o.v:o, l=typeof o==='object'?o.l:o;
+    return `<option value="${esc(v)}" ${v===value?'selected':''}>${esc(l)}</option>`;}).join('')}</select></div>`;
+}
+/* ============================================================
+   5 · TABLEAU DE BORD
+   ============================================================ */
+function linkCounts(){
+  const siteContact = DB.sites.filter(s=>s.contactId).length;
+  const contactAssoc = DB.contacts.reduce((n,c)=>n+((c.associationIds||[]).length),0)
+                      + DB.associations.reduce((n,a)=>n+((a.contactIds||[]).length),0);
+  const contactAgenda = DB.events.filter(e=>e.contactId).length;
+  const assocAgenda = DB.events.filter(e=>e.associationId).length;
+  const taskAgenda = DB.events.filter(e=>e.type==='deadline').length + DB.tasks.filter(t=>t.type==='fixe').length;
+  return {siteContact, contactAssoc:Math.round(contactAssoc/1)||0, contactAgenda, assocAgenda, taskAgenda};
+}
+
+function renderDashboard(){
+  const h=new Date().getHours();
+  $('dashGreeting').textContent = (h<12?'Bonjour':h<18?'Bon après-midi':'Bonsoir')+', au travail';
+  const tasksActive = DB.tasks.filter(t=>t.statut!=='Fait').length;
+  const upcoming = DB.events.filter(e=>e.date>=todayISO()).sort((a,b)=>a.date.localeCompare(b.date));
+  const urgent = DB.tasks.filter(t=>t.statut==='Urgent'||(t.statut!=='Fait'&&t.dateFin&&t.dateFin<todayISO()));
+
+  const stats=[
+    {n:DB.contacts.length,l:'Contacts',v:'contacts',accent:false},
+    {n:DB.associations.length,l:'Associations',v:'assocs',accent:false},
+    {n:DB.sites.length,l:'Sites',v:'sites',accent:true},
+    {n:tasksActive,l:'Tâches actives',v:'tasks',accent:false},
+    {n:upcoming.length,l:'Événements à venir',v:'agenda',accent:false},
+    {n:DB.tags.length,l:'Étiquettes',v:'contacts',accent:false},
+  ];
+
+  // tanks par catégorie
+  const catCounts = TASK_CATS.map(c=>({c, n:DB.tasks.filter(t=>t.categorie===c&&t.statut!=='Fait').length,
+    done:DB.tasks.filter(t=>t.categorie===c&&t.statut==='Fait').length}));
+  const maxCat = Math.max(1,...catCounts.map(x=>x.n+x.done));
+
+  $('dashGrid').innerHTML = `
+    ${stats.map(s=>`<div class="stat ${s.accent?'accent':''}" onclick="go('${s.v}')" style="cursor:pointer">
+      <div class="stat-num">${s.n}</div><div class="stat-lab">${s.l}</div></div>`).join('')}
+
+    <div class="panel graph-card">
+      <div class="panel-head"><h3>Connexions entre modules</h3><span class="ph-link mono">${DB.contacts.length+DB.sites.length+DB.associations.length} entités</span></div>
+      <div class="panel-body">${connectionGraphSVG()}</div>
+    </div>
+
+    <div class="side-col">
+      <div class="panel">
+        <div class="panel-head"><h3>Tâches urgentes</h3><span class="ph-link" onclick="go('tasks')">Tout voir</span></div>
+        <div class="panel-body">${ urgent.length ? urgent.slice(0,5).map(t=>`
+          <div class="mini-row" onclick="openTaskDetail('${t.id}')">
+            <span class="dot" style="background:${STATUS_COLOR[t.statut]}"></span>
+            <div class="mr-main"><b>${esc(t.titre)}</b><span>${esc(t.categorie)}</span></div>
+            <div class="mini-date">${t.dateFin?isoToShort(t.dateFin):''}</div>
+          </div>`).join('') : '<div class="empty" style="padding:24px"><p>Aucune tâche urgente. 🎉</p></div>' }</div>
       </div>
-      ${itemsHtml || '<div style="font-size:0.78rem;color:var(--gris);text-align:center;padding:8px 0;">Vide</div>'}
-      ${plus}
+      <div class="panel">
+        <div class="panel-head"><h3>Prochains événements</h3><span class="ph-link" onclick="go('agenda')">Agenda</span></div>
+        <div class="panel-body">${ upcoming.length ? upcoming.slice(0,5).map(e=>`
+          <div class="mini-row" onclick="openEventDetail('${e.id}')">
+            <span class="chip ev-type-${e.type}">${EVENT_LABEL[e.type]||e.type}</span>
+            <div class="mr-main"><b>${esc(e.titre)}</b><span>${esc(e.lieu||'')}</span></div>
+            <div class="mini-date">${isoToShort(e.date)}</div>
+          </div>`).join('') : '<div class="empty" style="padding:24px"><p>Rien de prévu.</p></div>' }</div>
+      </div>
+    </div>
+
+    <div class="panel cat-tanks">
+      <div class="panel-head"><h3>Tâches par catégorie</h3><span class="ph-link" onclick="go('tasks')">Frise</span></div>
+      <div class="tank-grid">${catCounts.map(x=>`
+        <div class="tank" onclick="state.taskCat='${x.c}';go('tasks')" style="cursor:pointer">
+          <b>${x.n}</b><span>${x.c}</span>
+          <div class="tbar"><i style="width:${Math.round((x.n+x.done)/maxCat*100)}%;background:${CAT_COLOR[x.c]}"></i></div>
+        </div>`).join('')}</div>
+    </div>`;
+}
+
+function connectionGraphSVG(){
+  const L=linkCounts();
+  const N={
+    contacts:{x:300,y:165,r:46,c:'#5C7A5E',lab:'Contacts',cnt:DB.contacts.length},
+    sites:{x:110,y:80,r:42,c:'#B85C2C',lab:'Sites',cnt:DB.sites.length},
+    assocs:{x:490,y:80,r:42,c:'#2A2420',lab:'Assoc.',cnt:DB.associations.length},
+    agenda:{x:470,y:270,r:40,c:'#8A6312',lab:'Agenda',cnt:DB.events.length},
+    tasks:{x:130,y:270,r:40,c:'#9A4A20',lab:'Tâches',cnt:DB.tasks.length},
+  };
+  const E=[
+    ['contacts','sites',L.siteContact],
+    ['contacts','assocs',L.contactAssoc],
+    ['contacts','agenda',L.contactAgenda],
+    ['assocs','agenda',L.assocAgenda],
+    ['tasks','agenda',L.taskAgenda],
+  ];
+  const edges=E.map(([a,b,w])=>{
+    const A=N[a],B=N[b];
+    const mx=(A.x+B.x)/2, my=(A.y+B.y)/2;
+    const sw=Math.max(1.5, Math.min(9, 1.5+w*1.3));
+    return `<line class="edge ${w>0?'hot':''}" x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke-width="${sw}"/>
+      ${w>0?`<text class="edge-lab" x="${mx}" y="${my-5}">${w}</text>`:''}`;
+  }).join('');
+  const nodes=Object.entries(N).map(([k,n])=>`
+    <g class="node-c" onclick="go('${k==='assocs'?'assocs':k}')">
+      <circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${n.c}"/>
+      <text class="node-cnt" x="${n.x}" y="${n.y-2}">${n.cnt}</text>
+      <text class="node-lab" x="${n.x}" y="${n.y+16}">${n.lab}</text>
+    </g>`).join('');
+  return `<svg id="graphSvg" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet">${edges}${nodes}</svg>`;
+}
+/* ============================================================
+   6 · TÂCHES — frise chronologique + Kanban
+   ============================================================ */
+function setTaskView(v){
+  state.taskView=v;
+  $('segFrise').classList.toggle('on',v==='frise');
+  $('segKanban').classList.toggle('on',v==='kanban');
+  $('taskFriseArea').classList.toggle('hidden',v!=='frise');
+  $('taskKanbanArea').classList.toggle('hidden',v!=='kanban');
+  renderTasks();
+}
+function renderTasks(){
+  // filtres catégorie
+  const cats=['all',...TASK_CATS];
+  $('taskCatFilter').innerHTML = cats.map(c=>`<span class="tag ${state.taskCat===c?'sel':''}" onclick="state.taskCat='${c==='all'?'all':c}';renderTasks()">${c==='all'?'Toutes catégories':esc(c)}</span>`).join('');
+  if(state.taskView==='frise') renderFrise(); else renderKanban();
+}
+function visibleTasks(){
+  return DB.tasks.filter(t=>state.taskCat==='all'||t.categorie===state.taskCat);
+}
+
+function renderFrise(){
+  const d=state.taskMonth, y=d.getFullYear(), m=d.getMonth();
+  const ndays=dim(y,m), pad=n=>String(n).padStart(2,'0');
+  const mStart=`${y}-${pad(m+1)}-01`, mEnd=`${y}-${pad(m+1)}-${pad(ndays)}`;
+  const today=todayISO();
+  const COLW=42;
+
+  const dayHeader = Array.from({length:ndays},(_,i)=>{
+    const day=i+1, iso=`${y}-${pad(m+1)}-${pad(day)}`;
+    const dow=(new Date(y,m,day).getDay()+6)%7, wknd=dow>=5;
+    return `<div class="tl-day ${wknd?'wknd':''} ${iso===today?'today':''}">
+      <div class="d-dow">${JOURS[dow][0]}</div><div class="d-num">${day}</div></div>`;
+  }).join('');
+  const gridBg = Array.from({length:ndays},(_,i)=>{
+    const dow=(new Date(y,m,i+1).getDay()+6)%7; return `<i class="${dow>=5?'wknd':''}"></i>`;}).join('');
+
+  const lane = (type, label) => {
+    const items = visibleTasks().filter(t=>t.type===type && t.dateFin>=mStart && t.dateDebut<=mEnd);
+    let rows;
+    if(!items.length){ rows=`<div class="tl-empty-lane">Aucune tâche ${type==='fixe'?'jalon':'précise'} ce mois-ci.</div>`; }
+    else rows=items.sort((a,b)=>a.dateDebut.localeCompare(b.dateDebut)).map(t=>{
+      const s = t.dateDebut<mStart?mStart:t.dateDebut;
+      const e = t.dateFin>mEnd?mEnd:t.dateFin;
+      const si=parseInt(s.slice(8))-1, ei=parseInt(e.slice(8))-1;
+      const left=si*COLW+2, width=(ei-si+1)*COLW-4;
+      const done=t.statut==='Fait';
+      return `<div class="tl-row">
+        <div class="tl-grid">${gridBg}</div>
+        <div class="tl-bar ${done?'done':''}" style="left:${left}px;width:${width}px;background:${STATUS_COLOR[t.statut]}" onclick="openTaskDetail('${t.id}')">
+          <span class="tb-check" onclick="event.stopPropagation();toggleTaskDone('${t.id}')">${done?'✓':''}</span>
+          <span style="overflow:hidden;text-overflow:ellipsis">${esc(t.titre)}</span>
+        </div></div>`;
+    }).join('');
+    return `<div class="tl-lane-label">${label}</div>${rows}`;
+  };
+
+  $('taskFriseArea').innerHTML = `
+    <div class="timeline-wrap">
+      <div class="tl-monthbar">
+        <button class="icon-btn" onclick="shiftTaskMonth(-1)"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <h3>${monthLabel(d)}</h3>
+        <div style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm" onclick="state.taskMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);renderTasks()">Aujourd'hui</button>
+        <button class="icon-btn" onclick="shiftTaskMonth(1)"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+      </div>
+      <div class="tl-scroll"><div class="tl-inner" style="width:${ndays*COLW}px">
+        <div class="tl-days">${dayHeader}</div>
+        ${lane('fixe','◆ Tâches fixes — jalons de thèse')}
+        ${lane('precise','• Tâches précises — actions')}
+      </div></div>
+    </div>
+    ${visibleTasks().length===0?emptyState('Aucune tâche','Créez vos jalons de thèse et vos actions quotidiennes.','editTask()'):''}`;
+}
+function shiftTaskMonth(n){ const d=state.taskMonth; state.taskMonth=new Date(d.getFullYear(),d.getMonth()+n,1); renderTasks(); }
+
+function renderKanban(){
+  const cols = TASK_STATUSES.map(st=>{
+    const items=visibleTasks().filter(t=>t.statut===st);
+    return `<div class="kan-col">
+      <div class="kan-col-head"><span class="dot" style="background:${STATUS_COLOR[st]}"></span>${st}<span class="kc-count">${items.length}</span></div>
+      <div class="kan-list">${items.map(t=>`
+        <div class="kan-card" onclick="openTaskDetail('${t.id}')">
+          <b>${esc(t.titre)}</b>
+          ${t.description?`<div class="muted" style="font-size:12.5px">${esc(t.description).slice(0,80)}</div>`:''}
+          <div class="kc-meta">
+            <span class="tag" style="height:21px;background:${CAT_COLOR[t.categorie]}22;color:${CAT_COLOR[t.categorie]}">${esc(t.categorie)}</span>
+            ${t.dateFin?`<span class="mono">→ ${isoToShort(t.dateFin)}</span>`:''}
+            <span class="tag" style="height:21px">${t.type==='fixe'?'◆ jalon':'• action'}</span>
+          </div></div>`).join('')||'<div class="tl-empty-lane">—</div>'}</div>
     </div>`;
   }).join('');
+  $('taskKanbanArea').innerHTML=`<div class="kanban">${cols}</div>`;
+}
 
-  // Prochains événements
-  const aujourd = new Date().toISOString().split('T')[0];
-  const prochains = DB.events.filter(e => e.date >= aujourd).slice(0,3);
-  const pe = document.getElementById('prochains-events');
-  if (!prochains.length) {
-    pe.innerHTML = '<div style="color:var(--gris);font-size:0.82rem;padding:8px 0;">Aucun événement à venir.</div>';
-  } else {
-    const moisNoms = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-    pe.innerHTML = prochains.map(e => {
-      const date = new Date(e.date + 'T00:00:00');
-      return `<div class="event-item">
-        <div class="event-date-block">
-          <div class="event-day">${date.getDate()}</div>
-          <div class="event-month">${moisNoms[date.getMonth()]}</div>
-        </div>
-        <div class="event-content">
-          <div class="event-title">${e.titre}</div>
-          <div class="event-meta">${e.type}${e.lieu ? ' · ' + e.lieu : ''}</div>
-        </div>
-      </div>`;
-    }).join('');
+function toggleTaskDone(id){
+  const t=DB.tasks.find(x=>x.id===id); if(!t)return;
+  t.statut = t.statut==='Fait'?'À faire':'Fait'; save(); renderTasks();
+  toast(t.statut==='Fait'?'Tâche terminée ✓':'Tâche réouverte');
+}
+
+/* --- éditeur de tâche --- */
+function editTask(id){
+  const t = id?DB.tasks.find(x=>x.id===id):null;
+  state.editType='task'; state.editId=id||null;
+  const body=`
+    <div class="field"><label>Titre</label><input id="f_titre" value="${esc(t?.titre||'')}" placeholder="Ex. Rendre l'état de l'art"></div>
+    <div class="field"><label>Description</label><textarea id="f_desc" placeholder="Détails…">${esc(t?.description||'')}</textarea></div>
+    <div class="field-row">
+      <div class="field"><label>Date de début</label><input id="f_deb" type="date" value="${t?.dateDebut||todayISO()}"></div>
+      <div class="field"><label>Date de fin</label><input id="f_fin" type="date" value="${t?.dateFin||t?.dateDebut||todayISO()}"></div>
+    </div>
+    <div class="field-row">
+      ${selectField('Statut','f_statut',TASK_STATUSES,t?.statut||'À faire')}
+      ${selectField('Catégorie','f_cat',TASK_CATS,t?.categorie||'Thèse')}
+    </div>
+    ${selectField('Type','f_type',[{v:'fixe',l:'◆ Tâche fixe (jalon de thèse)'},{v:'precise',l:'• Tâche précise (action)'}],t?.type||'precise')}`;
+  const foot=`${id?`<button class="btn btn-ghost btn-danger" onclick="deleteTask('${id}')">Supprimer</button>`:''}
+    <div style="flex:1"></div>
+    <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+    <button class="btn btn-primary" onclick="saveTask()">Enregistrer</button>`;
+  openModal(id?'Modifier la tâche':'Nouvelle tâche', body, foot);
+}
+function saveTask(){
+  const titre=$('f_titre').value.trim(); if(!titre){toast('Titre requis','err');return;}
+  let deb=$('f_deb').value, fin=$('f_fin').value||deb; if(fin<deb)[deb,fin]=[fin,deb];
+  const data={titre,description:$('f_desc').value.trim(),dateDebut:deb,dateFin:fin,
+    statut:$('f_statut').value,categorie:$('f_cat').value,type:$('f_type').value};
+  if(state.editId){ Object.assign(DB.tasks.find(x=>x.id===state.editId),data); }
+  else DB.tasks.push({id:uid(),...data,createdAt:todayISO()});
+  save(); closeModal(); renderTasks(); toast('Tâche enregistrée','ok');
+}
+function deleteTask(id){ if(!confirm('Supprimer cette tâche ?'))return; DB.tasks=DB.tasks.filter(t=>t.id!==id); save(); closeModal(); renderTasks(); toast('Tâche supprimée'); }
+
+function openTaskDetail(id){
+  const t=DB.tasks.find(x=>x.id===id); if(!t)return;
+  const body=`
+    <div class="detail-meta">
+      <div class="dm"><div class="dm-l">Statut</div><div class="dm-v"><span class="chip ${STATUS_CLASS[t.statut]}">${esc(t.statut)}</span></div></div>
+      <div class="dm"><div class="dm-l">Catégorie</div><div class="dm-v">${esc(t.categorie)}</div></div>
+      <div class="dm"><div class="dm-l">Type</div><div class="dm-v">${t.type==='fixe'?'◆ Jalon':'• Action'}</div></div>
+      <div class="dm"><div class="dm-l">Période</div><div class="dm-v mono">${isoToFr(t.dateDebut)} → ${isoToFr(t.dateFin)}</div></div>
+    </div>
+    ${t.description?`<div class="detail-sec"><h4>Description</h4><div class="notes-block">${esc(t.description)}</div></div>`:''}`;
+  const foot=`<button class="btn btn-ghost" onclick="toggleTaskDone('${id}');closeModal()">${t.statut==='Fait'?'Rouvrir':'Marquer terminée'}</button>
+    <div style="flex:1"></div><button class="btn btn-primary" onclick="editTask('${id}')">Modifier</button>`;
+  openModal(esc(t.titre), body, foot);
+}
+
+function emptyState(title,desc,action){
+  return `<div class="empty">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <h4>${esc(title)}</h4><p>${esc(desc)}</p>
+    ${action?`<button class="btn btn-accent" onclick="${action}">Commencer</button>`:''}</div>`;
+}
+/* ============================================================
+   7 · AGENDA — calendrier mensuel + liste
+   ============================================================ */
+function renderAgenda(){
+  const d=state.agendaMonth, y=d.getFullYear(), m=d.getMonth();
+  const ndays=dim(y,m), start=firstDow(y,m), pad=n=>String(n).padStart(2,'0');
+  const today=todayISO();
+  const evByDay={};
+  DB.events.forEach(e=>{ if(e.date&&e.date.startsWith(`${y}-${pad(m+1)}`)){ (evByDay[parseInt(e.date.slice(8))] ||= []).push(e); }});
+
+  let cells='';
+  // jours du mois précédent
+  const prevDays=dim(y,m-1);
+  for(let i=0;i<start;i++){ cells+=`<div class="cal-cell out"><div class="cc-num">${prevDays-start+i+1}</div></div>`; }
+  for(let day=1;day<=ndays;day++){
+    const iso=`${y}-${pad(m+1)}-${pad(day)}`;
+    const evs=(evByDay[day]||[]).sort((a,b)=>a.titre.localeCompare(b.titre));
+    const shown=evs.slice(0,3).map(e=>`<div class="cc-ev ev-type-${e.type}" onclick="event.stopPropagation();openEventDetail('${e.id}')">${esc(e.titre)}</div>`).join('');
+    const more=evs.length>3?`<div class="cc-more">+${evs.length-3}</div>`:'';
+    cells+=`<div class="cal-cell ${iso===today?'today':''}" onclick="editEvent(null,'${iso}')"><div class="cc-num">${day}</div>${shown}${more}</div>`;
   }
+  const totalCells=start+ndays, trailing=(7-(totalCells%7))%7;
+  for(let i=1;i<=trailing;i++){ cells+=`<div class="cal-cell out"><div class="cc-num">${i}</div></div>`; }
+
+  const monthEvents=DB.events.filter(e=>e.date&&e.date.startsWith(`${y}-${pad(m+1)}`)).sort((a,b)=>a.date.localeCompare(b.date));
+
+  $('agendaArea').innerHTML=`
+    <div class="cal">
+      <div class="cal-head">
+        <button class="icon-btn" onclick="shiftAgendaMonth(-1)"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <h3>${monthLabel(d)}</h3>
+        <div style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm" onclick="state.agendaMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);renderAgenda()">Aujourd'hui</button>
+        <button class="icon-btn" onclick="shiftAgendaMonth(1)"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+      </div>
+      <div class="cal-dow">${JOURS.map(j=>`<div>${j}</div>`).join('')}</div>
+      <div class="cal-grid">${cells}</div>
+    </div>
+    <div class="panel" style="margin-top:14px">
+      <div class="panel-head"><h3>Événements du mois</h3><span class="ph-link mono">${monthEvents.length}</span></div>
+      <div class="panel-body">${ monthEvents.length? monthEvents.map(e=>{
+        const c=e.contactId?getContact(e.contactId):null, a=e.associationId?getAssoc(e.associationId):null;
+        return `<div class="mini-row" onclick="openEventDetail('${e.id}')">
+          <span class="chip ev-type-${e.type}">${EVENT_LABEL[e.type]||e.type}</span>
+          <div class="mr-main"><b>${esc(e.titre)}</b><span>${esc(e.lieu||'')}${c?' · '+esc(contactName(c)):''}${a?' · '+esc(a.nom):''}</span></div>
+          <div class="mini-date">${isoToFr(e.date)}</div></div>`;}).join('')
+        : '<div class="empty" style="padding:30px"><p>Aucun événement ce mois-ci. Touchez une date pour en ajouter.</p></div>' }</div>
+    </div>`;
+}
+function shiftAgendaMonth(n){ const d=state.agendaMonth; state.agendaMonth=new Date(d.getFullYear(),d.getMonth()+n,1); renderAgenda(); }
+
+function editEvent(id,presetDate){
+  const e=id?DB.events.find(x=>x.id===id):null;
+  state.editType='event'; state.editId=id||null;
+  const contactOpts=[{v:'',l:'— Aucun —'},...DB.contacts.map(c=>({v:c.id,l:contactName(c)}))];
+  const assocOpts=[{v:'',l:'— Aucune —'},...DB.associations.map(a=>({v:a.id,l:a.nom}))];
+  const body=`
+    <div class="field"><label>Titre</label><input id="f_titre" value="${esc(e?.titre||'')}" placeholder="Ex. RDV avec…"></div>
+    <div class="field-row">
+      <div class="field"><label>Date</label><input id="f_date" type="date" value="${e?.date||presetDate||todayISO()}"></div>
+      ${selectField('Type','f_type',EVENT_TYPES.map(t=>({v:t,l:EVENT_LABEL[t]})),e?.type||'rdv')}
+    </div>
+    <div class="field"><label>Lieu</label><input id="f_lieu" value="${esc(e?.lieu||'')}" placeholder="Ville, institution…"></div>
+    <div class="field-row">
+      ${selectField('Lien contact','f_contact',contactOpts,e?.contactId||'')}
+      ${selectField('Lien association','f_assoc',assocOpts,e?.associationId||'')}
+    </div>
+    <div class="field"><label>Notes</label><textarea id="f_notes" placeholder="…">${esc(e?.notes||'')}</textarea></div>`;
+  const foot=`${id?`<button class="btn btn-ghost btn-danger" onclick="deleteEvent('${id}')">Supprimer</button>`:''}
+    <div style="flex:1"></div><button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+    <button class="btn btn-primary" onclick="saveEvent()">Enregistrer</button>`;
+  openModal(id?'Modifier l\u2019événement':'Nouvel événement', body, foot);
+}
+function saveEvent(){
+  const titre=$('f_titre').value.trim(); if(!titre){toast('Titre requis','err');return;}
+  const data={titre,date:$('f_date').value,type:$('f_type').value,lieu:$('f_lieu').value.trim(),
+    contactId:$('f_contact').value,associationId:$('f_assoc').value,notes:$('f_notes').value.trim()};
+  if(state.editId) Object.assign(DB.events.find(x=>x.id===state.editId),data);
+  else DB.events.push({id:uid(),...data,createdAt:todayISO()});
+  save(); closeModal(); renderAgenda(); toast('Événement enregistré','ok');
+}
+function deleteEvent(id){ if(!confirm('Supprimer cet événement ?'))return; DB.events=DB.events.filter(e=>e.id!==id); save(); closeModal(); renderAgenda(); toast('Événement supprimé'); }
+
+function openEventDetail(id){
+  const e=DB.events.find(x=>x.id===id); if(!e)return;
+  const c=e.contactId?getContact(e.contactId):null, a=e.associationId?getAssoc(e.associationId):null;
+  const body=`
+    <div class="detail-meta">
+      <div class="dm"><div class="dm-l">Date</div><div class="dm-v mono">${isoToFr(e.date)}</div></div>
+      <div class="dm"><div class="dm-l">Type</div><div class="dm-v"><span class="chip ev-type-${e.type}">${EVENT_LABEL[e.type]||e.type}</span></div></div>
+      ${e.lieu?`<div class="dm"><div class="dm-l">Lieu</div><div class="dm-v">${esc(e.lieu)}</div></div>`:''}
+    </div>
+    ${(c||a)?`<div class="detail-sec"><h4>Liens</h4>
+      ${c?`<span class="link-chip" onclick="openContactDetail('${c.id}')"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20a7 7 0 0114 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>${esc(contactName(c))}</span>`:''}
+      ${a?`<span class="link-chip" onclick="openAssocDetail('${a.id}')"><svg viewBox="0 0 24 24" fill="none"><circle cx="7" cy="9" r="2.6" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="9" r="2.6" stroke="currentColor" stroke-width="1.8"/></svg>${esc(a.nom)}</span>`:''}</div>`:''}
+    ${e.notes?`<div class="detail-sec"><h4>Notes</h4><div class="notes-block">${esc(e.notes)}</div></div>`:''}`;
+  const foot=`<div style="flex:1"></div><button class="btn btn-primary" onclick="editEvent('${id}')">Modifier</button>`;
+  openModal(esc(e.titre), body, foot);
+}
+/* ============================================================
+   8 · CONTACTS — carnet de réseau
+   ============================================================ */
+function allContactTags(){ return [...new Set(DB.contacts.flatMap(c=>c.tags||[]))].sort(); }
+
+function renderContacts(){
+  const tags=allContactTags();
+  $('contactTagFilter').innerHTML = tags.length? (
+    `<span class="tag ${!state.contactTag?'sel':''}" onclick="state.contactTag=null;renderContacts()">Tous</span>`+
+    tags.map(t=>`<span class="tag ${state.contactTag===t?'sel':''}" onclick="state.contactTag=(state.contactTag==='${esc(t)}'?null:'${esc(t)}');renderContacts()">#${esc(t)}</span>`).join('')) : '';
+  let list=DB.contacts; if(state.contactTag) list=list.filter(c=>(c.tags||[]).includes(state.contactTag));
+  list=[...list].sort((a,b)=>(a.nom||'').localeCompare(b.nom||''));
+  if(!DB.contacts.length){ $('contactsGrid').innerHTML=emptyState('Aucun contact','Constituez votre carnet de réseau : chercheurs, responsables de mission, partenaires.','editContact()'); return; }
+  $('contactsGrid').innerHTML = list.map(c=>{
+    const sites = associatedSites(c);
+    const rel = c.statutRelation||'';
+    return `<div class="card click" onclick="openContactDetail('${c.id}')">
+      <div class="card-strata"></div>
+      <div class="card-body">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+          <h3 style="font-size:19px">${esc(contactName(c))}</h3>
+          ${rel?`<span class="chip ${rel==='Rencontré'?'fait':rel==='En attente'?'encours':'afaire'}" style="flex:0 0 auto">${esc(rel)}</span>`:''}
+        </div>
+        ${c.specialite?`<p class="muted" style="margin:4px 0 0;font-size:13.5px">${esc(c.specialite)}</p>`:''}
+        ${c.institution?`<p class="muted" style="margin:2px 0 0;font-size:12.5px">${esc(c.institution)}</p>`:''}
+        ${(c.tags&&c.tags.length)?`<div class="tags" style="margin-top:11px">${c.tags.slice(0,4).map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div>`:''}
+        ${sites.length?`<div class="muted" style="margin-top:10px;font-size:12px;display:flex;align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z" stroke="currentColor" stroke-width="1.8"/></svg>${sites.length} site${sites.length>1?'s':''} lié${sites.length>1?'s':''}</div>`:''}
+      </div></div>`;
+  }).join('');
+}
+function associatedSites(c){
+  const ids=new Set([...(c.siteIds||[])]);
+  DB.sites.forEach(s=>{ if(s.contactId===c.id) ids.add(s.id); });
+  return [...ids].map(getSite).filter(Boolean);
 }
 
-// ══════════════════════════════════════════
-// EXPORT JSON
-// ══════════════════════════════════════════
-function exporterDonnees() {
-  const data = {
-    export_date: new Date().toISOString(),
-    version: '1.0',
-    ...DB
+let _formSites=[], _formAssocs=[];
+function editContact(id){
+  const c=id?getContact(id):null;
+  state.editType='contact'; state.editId=id||null;
+  _formSites=[...(c?.siteIds||[])]; _formAssocs=[...(c?.associationIds||[])];
+  const body=`
+    <div class="field-row">
+      <div class="field"><label>Prénom</label><input id="f_prenom" value="${esc(c?.prenom||'')}"></div>
+      <div class="field"><label>Nom</label><input id="f_nom" value="${esc(c?.nom||'')}"></div>
+    </div>
+    <div class="field"><label>Spécialité</label><input id="f_spec" value="${esc(c?.specialite||'')}" placeholder="Ex. Art rupestre, gravures"></div>
+    <div class="field-row">
+      <div class="field"><label>Institution</label><input id="f_inst" value="${esc(c?.institution||'')}" placeholder="Université, CNRS, musée…"></div>
+      <div class="field"><label>Laboratoire</label><input id="f_lab" value="${esc(c?.laboratoire||'')}"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Mail</label><input id="f_mail" type="email" value="${esc(c?.mail||'')}"></div>
+      <div class="field"><label>Téléphone</label><input id="f_tel" value="${esc(c?.telephone||'')}"></div>
+    </div>
+    ${selectField('Statut de relation','f_rel',CONTACT_REL,c?.statutRelation||'En attente')}
+    <div class="field"><label>Étiquettes</label>${tagEditor(c?.tags)}</div>
+    <div class="field"><label>Sites associés</label>${chipsSelector('site',DB.sites.map(s=>({v:s.id,l:s.nom})),_formSites)}</div>
+    <div class="field"><label>Associations</label>${chipsSelector('assoc',DB.associations.map(a=>({v:a.id,l:a.nom})),_formAssocs)}</div>
+    <div class="field"><label>Notes</label><textarea id="f_notes">${esc(c?.notes||'')}</textarea></div>`;
+  const foot=`${id?`<button class="btn btn-ghost btn-danger" onclick="deleteContact('${id}')">Supprimer</button>`:''}
+    <div style="flex:1"></div><button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+    <button class="btn btn-primary" onclick="saveContact()">Enregistrer</button>`;
+  openModal(id?'Modifier le contact':'Nouveau contact', body, foot);
+}
+function saveContact(){
+  const nom=$('f_nom').value.trim(), prenom=$('f_prenom').value.trim();
+  if(!nom&&!prenom){toast('Nom requis','err');return;}
+  commitTags(_formTags);
+  const data={nom,prenom,specialite:$('f_spec').value.trim(),institution:$('f_inst').value.trim(),
+    laboratoire:$('f_lab').value.trim(),mail:$('f_mail').value.trim(),telephone:$('f_tel').value.trim(),
+    statutRelation:$('f_rel').value,tags:[..._formTags],notes:$('f_notes').value.trim(),
+    siteIds:[..._formSites],associationIds:[..._formAssocs]};
+  let cid;
+  if(state.editId){ cid=state.editId; Object.assign(getContact(cid),data); }
+  else { cid=uid(); DB.contacts.push({id:cid,...data,createdAt:todayISO()}); }
+  syncContactAssoc(cid,_formAssocs);
+  save(); closeModal(); renderContacts(); toast('Contact enregistré','ok');
+}
+function syncContactAssoc(contactId, assocIds){
+  DB.associations.forEach(a=>{
+    a.contactIds=a.contactIds||[];
+    const should=assocIds.includes(a.id), has=a.contactIds.includes(contactId);
+    if(should&&!has) a.contactIds.push(contactId);
+    if(!should&&has) a.contactIds=a.contactIds.filter(x=>x!==contactId);
+  });
+}
+function deleteContact(id){
+  if(!confirm('Supprimer ce contact ?'))return;
+  DB.contacts=DB.contacts.filter(c=>c.id!==id);
+  DB.sites.forEach(s=>{ if(s.contactId===id) s.contactId=''; });
+  DB.events.forEach(e=>{ if(e.contactId===id) e.contactId=''; });
+  DB.associations.forEach(a=>{ a.contactIds=(a.contactIds||[]).filter(x=>x!==id); });
+  save(); closeModal(); renderContacts(); toast('Contact supprimé');
+}
+
+function openContactDetail(id){
+  const c=getContact(id); if(!c)return;
+  state.detailType='contact'; state.detailId=id;
+  const sites=associatedSites(c);
+  const assocs=(c.associationIds||[]).map(getAssoc).filter(Boolean);
+  const evs=DB.events.filter(e=>e.contactId===id).sort((a,b)=>a.date.localeCompare(b.date));
+  const body=`
+    <div class="detail-meta">
+      ${c.specialite?`<div class="dm"><div class="dm-l">Spécialité</div><div class="dm-v">${esc(c.specialite)}</div></div>`:''}
+      ${c.institution?`<div class="dm"><div class="dm-l">Institution</div><div class="dm-v">${esc(c.institution)}</div></div>`:''}
+      ${c.laboratoire?`<div class="dm"><div class="dm-l">Laboratoire</div><div class="dm-v">${esc(c.laboratoire)}</div></div>`:''}
+      ${c.statutRelation?`<div class="dm"><div class="dm-l">Relation</div><div class="dm-v">${esc(c.statutRelation)}</div></div>`:''}
+      ${c.mail?`<div class="dm"><div class="dm-l">Mail</div><a class="dm-v" href="mailto:${esc(c.mail)}">${esc(c.mail)}</a></div>`:''}
+      ${c.telephone?`<div class="dm"><div class="dm-l">Téléphone</div><a class="dm-v mono" href="tel:${esc(c.telephone)}">${esc(c.telephone)}</a></div>`:''}
+    </div>
+    ${(c.tags&&c.tags.length)?`<div class="tags" style="margin-bottom:6px">${c.tags.map(t=>`<span class="tag sienna">#${esc(t)}</span>`).join('')}</div>`:''}
+    ${sites.length?`<div class="detail-sec"><h4>Sites associés</h4>${sites.map(s=>`<span class="link-chip" onclick="openSiteDetail('${s.id}')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z" stroke="currentColor" stroke-width="1.8"/></svg>${esc(s.nom)}</span>`).join('')}</div>`:''}
+    ${assocs.length?`<div class="detail-sec"><h4>Associations</h4>${assocs.map(a=>`<span class="link-chip" onclick="openAssocDetail('${a.id}')"><svg viewBox="0 0 24 24" fill="none"><circle cx="7" cy="9" r="2.6" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="9" r="2.6" stroke="currentColor" stroke-width="1.8"/></svg>${esc(a.nom)}</span>`).join('')}</div>`:''}
+    ${evs.length?`<div class="detail-sec"><h4>Événements liés</h4>${evs.map(e=>`<span class="link-chip" onclick="openEventDetail('${e.id}')"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>${esc(e.titre)} · ${isoToShort(e.date)}</span>`).join('')}</div>`:''}
+    ${c.notes?`<div class="detail-sec"><h4>Notes</h4><div class="notes-block">${esc(c.notes)}</div></div>`:''}
+    <div class="detail-sec"><h4>Échanges Gmail</h4>
+      <button class="btn btn-ghost btn-sm" id="gmailBtn" onclick="gmailSummary('${id}')"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>Résumer les échanges (IA)</button>
+      <div id="gmailResult" style="margin-top:12px"></div>
+    </div>`;
+  const foot=`<div style="flex:1"></div><button class="btn btn-primary" onclick="editContact('${id}')">Modifier</button>`;
+  openModal(esc(contactName(c)), body, foot);
+}
+
+/* sélecteur multi (chips) générique : 'site' ou 'assoc' */
+function chipsSelector(kind, options, selected){
+  if(!options.length) return `<div class="muted" style="font-size:13px;padding:4px 0">Aucun élément à lier pour l'instant.</div>`;
+  return `<div class="tags" id="cs_${kind}">${options.map(o=>`<span class="tag ${selected.includes(o.v)?'sel':''}" onclick="toggleChip('${kind}','${o.v}')">${esc(o.l)}</span>`).join('')}</div>`;
+}
+function toggleChip(kind,v){
+  const arr = kind==='site'?_formSites : kind==='assoc'?_formAssocs : kind==='siteContact'?_formSiteContacts : null;
+  const i=arr.indexOf(v); if(i>=0)arr.splice(i,1); else arr.push(v);
+  const opts = kind==='site'?DB.sites.map(s=>({v:s.id,l:s.nom})) : DB.associations.map(a=>({v:a.id,l:a.nom}));
+  $('cs_'+kind).innerHTML = opts.map(o=>`<span class="tag ${arr.includes(o.v)?'sel':''}" onclick="toggleChip('${kind}','${o.v}')">${esc(o.l)}</span>`).join('');
+}
+/* ============================================================
+   9 · ASSOCIATIONS
+   ============================================================ */
+function allAssocTags(){ return [...new Set(DB.associations.flatMap(a=>a.tags||[]))].sort(); }
+function renderAssocs(){
+  const tags=allAssocTags();
+  $('assocTagFilter').innerHTML = tags.length? (
+    `<span class="tag ${!state.assocTag?'sel':''}" onclick="state.assocTag=null;renderAssocs()">Toutes</span>`+
+    tags.map(t=>`<span class="tag ${state.assocTag===t?'sel':''}" onclick="state.assocTag=(state.assocTag==='${esc(t)}'?null:'${esc(t)}');renderAssocs()">#${esc(t)}</span>`).join('')) : '';
+  let list=DB.associations; if(state.assocTag) list=list.filter(a=>(a.tags||[]).includes(state.assocTag));
+  list=[...list].sort((a,b)=>(a.nom||'').localeCompare(b.nom||''));
+  if(!DB.associations.length){ $('assocsGrid').innerHTML=emptyState('Aucune association','Référencez les associations et institutions partenaires.','editAssoc()'); return; }
+  $('assocsGrid').innerHTML=list.map(a=>`
+    <div class="card click" onclick="openAssocDetail('${a.id}')">
+      <div class="card-strata" style="background:linear-gradient(90deg,#5C7A5E,#E7DBC2 70%)"></div>
+      <div class="card-body">
+        <h3 style="font-size:19px">${esc(a.nom)}</h3>
+        ${a.specialite?`<p class="muted" style="margin:4px 0 0;font-size:13.5px">${esc(a.specialite)}</p>`:''}
+        ${a.presidentNom?`<p class="muted" style="margin:2px 0 0;font-size:12.5px">Président : ${esc(a.presidentNom)}</p>`:''}
+        ${(a.tags&&a.tags.length)?`<div class="tags" style="margin-top:11px">${a.tags.slice(0,4).map(t=>`<span class="tag sage">#${esc(t)}</span>`).join('')}</div>`:''}
+        <div class="muted" style="margin-top:10px;font-size:12px">${(a.membres||[]).length} membre${(a.membres||[]).length>1?'s':''} · ${(a.contactIds||[]).length} contact${(a.contactIds||[]).length>1?'s':''} lié${(a.contactIds||[]).length>1?'s':''}</div>
+      </div></div>`).join('');
+}
+
+let _formMembers=[], _formArticles=[];
+function editAssoc(id){
+  const a=id?getAssoc(id):null;
+  state.editType='assoc'; state.editId=id||null;
+  _formMembers=JSON.parse(JSON.stringify(a?.membres||[]));
+  _formArticles=JSON.parse(JSON.stringify(a?.articles||[]));
+  _formAssocs=[]; // reused? no
+  const body=`
+    <div class="field"><label>Nom de l'association</label><input id="f_nom" value="${esc(a?.nom||'')}"></div>
+    <div class="field"><label>Spécialité</label><input id="f_spec" value="${esc(a?.specialite||'')}" placeholder="Ex. Conservation des gravures rupestres"></div>
+    <div class="field"><label>Adresse</label><input id="f_adr" value="${esc(a?.adresse||'')}"></div>
+    <div class="field-row">
+      <div class="field"><label>Mail de contact</label><input id="f_mail" type="email" value="${esc(a?.mail||'')}"></div>
+      <div class="field"><label>Site web</label><input id="f_web" value="${esc(a?.siteWeb||'')}" placeholder="https://…"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Président — nom</label><input id="f_presn" value="${esc(a?.presidentNom||'')}"></div>
+      <div class="field"><label>Président — mail</label><input id="f_presm" type="email" value="${esc(a?.presidentMail||'')}"></div>
+    </div>
+    <div class="field"><label>Membres</label><div id="membersBox">${renderMemberRows()}</div>
+      <button class="btn btn-ghost btn-sm" type="button" onclick="addMemberRow()" style="margin-top:6px">＋ Ajouter un membre</button></div>
+    <div class="field"><label>Articles liés</label><div id="articlesBox">${renderArticleRows()}</div>
+      <button class="btn btn-ghost btn-sm" type="button" onclick="addArticleRow()" style="margin-top:6px">＋ Ajouter un article</button></div>
+    <div class="field"><label>Étiquettes</label>${tagEditor(a?.tags)}</div>
+    <div class="field"><label>Notes</label><textarea id="f_notes">${esc(a?.notes||'')}</textarea></div>`;
+  const foot=`${id?`<button class="btn btn-ghost btn-danger" onclick="deleteAssoc('${id}')">Supprimer</button>`:''}
+    <div style="flex:1"></div><button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+    <button class="btn btn-primary" onclick="saveAssoc()">Enregistrer</button>`;
+  openModal(id?'Modifier l\u2019association':'Nouvelle association', body, foot);
+}
+function renderMemberRows(){
+  return _formMembers.map((m,i)=>`<div class="member-row">
+    <input placeholder="Nom" value="${esc(m.nom)}" oninput="_formMembers[${i}].nom=this.value">
+    <input placeholder="Mail" value="${esc(m.mail)}" oninput="_formMembers[${i}].mail=this.value">
+    <button class="icon-btn" type="button" onclick="_formMembers.splice(${i},1);$('membersBox').innerHTML=renderMemberRows()"><svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+  </div>`).join('')||'<div class="muted" style="font-size:13px">Aucun membre.</div>';
+}
+function addMemberRow(){ _formMembers.push({nom:'',mail:''}); $('membersBox').innerHTML=renderMemberRows(); }
+function renderArticleRows(){
+  return _formArticles.map((a,i)=>`<div class="member-row">
+    <input placeholder="Titre" value="${esc(a.titre)}" oninput="_formArticles[${i}].titre=this.value">
+    <input placeholder="URL" value="${esc(a.url)}" oninput="_formArticles[${i}].url=this.value">
+    <button class="icon-btn" type="button" onclick="_formArticles.splice(${i},1);$('articlesBox').innerHTML=renderArticleRows()"><svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+  </div>`).join('')||'<div class="muted" style="font-size:13px">Aucun article.</div>';
+}
+function addArticleRow(){ _formArticles.push({titre:'',url:''}); $('articlesBox').innerHTML=renderArticleRows(); }
+
+function saveAssoc(){
+  const nom=$('f_nom').value.trim(); if(!nom){toast('Nom requis','err');return;}
+  commitTags(_formTags);
+  const data={nom,specialite:$('f_spec').value.trim(),adresse:$('f_adr').value.trim(),
+    mail:$('f_mail').value.trim(),siteWeb:$('f_web').value.trim(),
+    presidentNom:$('f_presn').value.trim(),presidentMail:$('f_presm').value.trim(),
+    membres:_formMembers.filter(m=>m.nom||m.mail),articles:_formArticles.filter(a=>a.titre||a.url),
+    tags:[..._formTags],notes:$('f_notes').value.trim()};
+  if(state.editId){ Object.assign(getAssoc(state.editId),data); }
+  else DB.associations.push({id:uid(),...data,contactIds:[],createdAt:todayISO()});
+  save(); closeModal(); renderAssocs(); toast('Association enregistrée','ok');
+}
+function deleteAssoc(id){
+  if(!confirm('Supprimer cette association ?'))return;
+  DB.associations=DB.associations.filter(a=>a.id!==id);
+  DB.contacts.forEach(c=>{ c.associationIds=(c.associationIds||[]).filter(x=>x!==id); });
+  DB.events.forEach(e=>{ if(e.associationId===id) e.associationId=''; });
+  save(); closeModal(); renderAssocs(); toast('Association supprimée');
+}
+
+function openAssocDetail(id){
+  const a=getAssoc(id); if(!a)return;
+  const contacts=(a.contactIds||[]).map(getContact).filter(Boolean);
+  const evs=DB.events.filter(e=>e.associationId===id).sort((x,y)=>x.date.localeCompare(y.date));
+  const body=`
+    <div class="detail-meta">
+      ${a.specialite?`<div class="dm"><div class="dm-l">Spécialité</div><div class="dm-v">${esc(a.specialite)}</div></div>`:''}
+      ${a.presidentNom?`<div class="dm"><div class="dm-l">Président</div><div class="dm-v">${esc(a.presidentNom)}</div></div>`:''}
+      ${a.adresse?`<div class="dm"><div class="dm-l">Adresse</div><div class="dm-v">${esc(a.adresse)}</div></div>`:''}
+      ${a.mail?`<div class="dm"><div class="dm-l">Mail</div><a class="dm-v" href="mailto:${esc(a.mail)}">${esc(a.mail)}</a></div>`:''}
+      ${a.siteWeb?`<div class="dm"><div class="dm-l">Site web</div><a class="dm-v" href="${esc(a.siteWeb)}" target="_blank" rel="noopener">${esc(a.siteWeb.replace(/^https?:\/\//,''))}</a></div>`:''}
+    </div>
+    ${(a.tags&&a.tags.length)?`<div class="tags" style="margin-bottom:6px">${a.tags.map(t=>`<span class="tag sage">#${esc(t)}</span>`).join('')}</div>`:''}
+    ${(a.membres&&a.membres.length)?`<div class="detail-sec"><h4>Membres</h4>${a.membres.map(m=>`<div class="mini-row" style="cursor:default"><div class="mr-main"><b>${esc(m.nom||'—')}</b>${m.mail?`<span>${esc(m.mail)}</span>`:''}</div></div>`).join('')}</div>`:''}
+    ${contacts.length?`<div class="detail-sec"><h4>Contacts liés</h4>${contacts.map(c=>`<span class="link-chip" onclick="openContactDetail('${c.id}')"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20a7 7 0 0114 0" stroke="currentColor" stroke-width="1.8"/></svg>${esc(contactName(c))}</span>`).join('')}</div>`:''}
+    ${(a.articles&&a.articles.length)?`<div class="detail-sec"><h4>Articles</h4>${a.articles.map(ar=>ar.url?`<a class="link-chip" href="${esc(ar.url)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none"><path d="M10 13a5 5 0 007 0l2-2a5 5 0 00-7-7l-1 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 11a5 5 0 00-7 0l-2 2a5 5 0 007 7l1-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>${esc(ar.titre||ar.url)}</a>`:`<span class="link-chip">${esc(ar.titre)}</span>`).join('')}</div>`:''}
+    ${evs.length?`<div class="detail-sec"><h4>Événements liés</h4>${evs.map(e=>`<span class="link-chip" onclick="openEventDetail('${e.id}')">${esc(e.titre)} · ${isoToShort(e.date)}</span>`).join('')}</div>`:''}
+    ${a.notes?`<div class="detail-sec"><h4>Notes</h4><div class="notes-block">${esc(a.notes)}</div></div>`:''}
+    ${a.siteWeb?`<div class="detail-sec"><h4>Veille du site web</h4>
+      <button class="btn btn-ghost btn-sm" id="scanBtn" onclick="scanAssocSite('${id}')"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Récupérer les prochaines actions</button>
+      <div id="scanResult" style="margin-top:12px"></div></div>`:''}`;
+  const foot=`<div style="flex:1"></div><button class="btn btn-primary" onclick="editAssoc('${id}')">Modifier</button>`;
+  openModal(esc(a.nom), body, foot);
+}
+
+/* ============================================================
+   MODULE 6 — SITES ARCHÉOLOGIQUES
+   ============================================================ */
+function allSiteTrads(){ return [...new Set(DB.sites.flatMap(s=>s.traditions||[]))].sort(); }
+function siteStatutClass(st){ return st==='Prospecté'?'fait' : st==='En cours d\u2019\u00e9tude'?'encours' : 'afaire'; }
+
+function renderSites(){
+  const trads=allSiteTrads();
+  $('siteTradFilter').innerHTML = trads.length? (
+    `<span class="tag ${!state.siteTrad?'sel':''}" onclick="state.siteTrad=null;renderSites()">Toutes</span>`+
+    trads.map(t=>`<span class="tag ${state.siteTrad===t?'sel':''}" onclick="state.siteTrad=(state.siteTrad==='${esc(t)}'?null:'${esc(t)}');renderSites()">${esc(t)}</span>`).join('')) : '';
+  let list=DB.sites; if(state.siteTrad) list=list.filter(s=>(s.traditions||[]).includes(state.siteTrad));
+  list=[...list].sort((a,b)=>(a.nom||'').localeCompare(b.nom||''));
+  if(!DB.sites.length){ $('sitesGrid').innerHTML=emptyState('Aucun site','Inventoriez vos sites : toponyme, r\u00e9gion, coordonn\u00e9es et traditions stylistiques.','editSite()'); return; }
+  $('sitesGrid').innerHTML = list.map(s=>{
+    const resp=getContact(s.contactId);
+    return `<div class="card click" onclick="openSiteDetail('${s.id}')">
+      <div class="card-strata"></div>
+      <div class="card-body">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+          <h3 style="font-size:19px">${esc(s.nom||'(sans nom)')}</h3>
+          ${s.statut?`<span class="chip ${siteStatutClass(s.statut)}" style="flex:0 0 auto">${esc(s.statut)}</span>`:''}
+        </div>
+        ${(s.region||s.province)?`<p class="muted" style="margin:5px 0 0;font-size:13px;display:flex;align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.3" stroke="currentColor" stroke-width="1.8"/></svg>${esc([s.region,s.province].filter(Boolean).join(' \u00b7 '))}</p>`:''}
+        ${s.periode?`<p class="muted" style="margin:3px 0 0;font-size:12.5px">${esc(s.periode)}</p>`:''}
+        ${(s.traditions&&s.traditions.length)?`<div class="tags" style="margin-top:11px">${s.traditions.slice(0,4).map(t=>`<span class="tag sage">${esc(t)}</span>`).join('')}</div>`:''}
+        ${resp?`<div class="muted" style="margin-top:10px;font-size:12px;display:flex;align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20a7 7 0 0114 0" stroke="currentColor" stroke-width="1.8"/></svg>${esc(contactName(resp))}</div>`:''}
+      </div></div>`;
+  }).join('');
+}
+
+function editSite(id){
+  const s=id?getSite(id):null;
+  state.editType='site'; state.editId=id||null;
+  const contactOpts=[{v:'',l:'\u2014 Aucun \u2014'}, ...DB.contacts.map(c=>({v:c.id,l:contactName(c)}))];
+  const body=`
+    <div class="field"><label>Nom du site (toponyme)</label><input id="f_nom" value="${esc(s?.nom||'')}" placeholder="Ex. Foum Chenna"></div>
+    <div class="field-row">
+      <div class="field"><label>R\u00e9gion</label><input id="f_region" value="${esc(s?.region||'')}" placeholder="Anti-Atlas, Dra\u00e2, Souss\u2026"></div>
+      <div class="field"><label>Province</label><input id="f_prov" value="${esc(s?.province||'')}" placeholder="Tata, Zagora\u2026"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Latitude</label><input id="f_lat" value="${s?.lat!=null?esc(String(s.lat)):''}" placeholder="29.7440" inputmode="decimal"></div>
+      <div class="field"><label>Longitude</label><input id="f_lng" value="${s?.lng!=null?esc(String(s.lng)):''}" placeholder="-7.9720" inputmode="decimal"></div>
+    </div>
+    <div class="field"><label>Traditions stylistiques</label>${tradEditor(s?.traditions)}</div>
+    <div class="field"><label>P\u00e9riode chronologique</label><input id="f_periode" value="${esc(s?.periode||'')}" placeholder="Holoc\u00e8ne, N\u00e9olithique, Bronze\u2026"></div>
+    ${selectField('Statut','f_statut',SITE_STATUSES,s?.statut||'\u00c0 prospecter')}
+    ${selectField('Contact responsable','f_resp',contactOpts,s?.contactId||'')}
+    <div class="field"><label>\u00c9tiquettes</label>${tagEditor(s?.tags)}</div>
+    <div class="field"><label>Notes / description</label><textarea id="f_notes">${esc(s?.notes||'')}</textarea></div>`;
+  const foot=`${id?`<button class="btn btn-ghost btn-danger" onclick="deleteSite('${id}')">Supprimer</button>`:''}
+    <div style="flex:1"></div><button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+    <button class="btn btn-primary" onclick="saveSite()">Enregistrer</button>`;
+  openModal(id?'Modifier le site':'Nouveau site', body, foot);
+}
+
+function saveSite(){
+  const nom=$('f_nom').value.trim();
+  if(!nom){toast('Nom du site requis','err');return;}
+  commitTags(_formTags);
+  const latRaw=$('f_lat').value.trim().replace(',','.'), lngRaw=$('f_lng').value.trim().replace(',','.');
+  const data={nom, region:$('f_region').value.trim(), province:$('f_prov').value.trim(),
+    lat: latRaw===''||isNaN(parseFloat(latRaw))?null:parseFloat(latRaw),
+    lng: lngRaw===''||isNaN(parseFloat(lngRaw))?null:parseFloat(lngRaw),
+    traditions:[..._formTrad], periode:$('f_periode').value.trim(),
+    statut:$('f_statut').value, contactId:$('f_resp').value,
+    tags:[..._formTags], notes:$('f_notes').value.trim()};
+  if(state.editId){ Object.assign(getSite(state.editId),data); }
+  else { DB.sites.push({id:uid(),...data,createdAt:todayISO()}); }
+  save(); closeModal(); renderSites(); toast('Site enregistr\u00e9','ok');
+}
+
+function deleteSite(id){
+  if(!confirm('Supprimer ce site ?'))return;
+  DB.sites=DB.sites.filter(s=>s.id!==id);
+  DB.contacts.forEach(c=>{ c.siteIds=(c.siteIds||[]).filter(x=>x!==id); });
+  save(); closeModal(); renderSites(); toast('Site supprim\u00e9');
+}
+
+function openSiteDetail(id){
+  const s=getSite(id); if(!s)return;
+  const resp=getContact(s.contactId);
+  const hasCoords = s.lat!=null && s.lng!=null;
+  const body=`
+    <div class="detail-meta">
+      ${(s.region||s.province)?`<div class="dm"><div class="dm-l">Localisation</div><div class="dm-v">${esc([s.region,s.province].filter(Boolean).join(' \u00b7 '))}</div></div>`:''}
+      ${s.statut?`<div class="dm"><div class="dm-l">Statut</div><div class="dm-v"><span class="chip ${siteStatutClass(s.statut)}">${esc(s.statut)}</span></div></div>`:''}
+      ${s.periode?`<div class="dm"><div class="dm-l">P\u00e9riode</div><div class="dm-v">${esc(s.periode)}</div></div>`:''}
+      ${hasCoords?`<div class="dm"><div class="dm-l">Coordonn\u00e9es</div><div class="dm-v" style="font-family:var(--font-mono);font-size:12.5px">${esc(String(s.lat))}, ${esc(String(s.lng))} \u00b7 <a href="https://www.openstreetmap.org/?mlat=${esc(String(s.lat))}&mlon=${esc(String(s.lng))}#map=13/${esc(String(s.lat))}/${esc(String(s.lng))}" target="_blank" rel="noopener">ouvrir</a></div></div>`:''}
+    </div>
+    ${(s.traditions&&s.traditions.length)?`<div class="detail-sec"><h4>Traditions stylistiques</h4><div class="tags">${s.traditions.map(t=>`<span class="tag sage">${esc(t)}</span>`).join('')}</div></div>`:''}
+    ${(s.tags&&s.tags.length)?`<div class="tags" style="margin-bottom:6px">${s.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div>`:''}
+    ${resp?`<div class="detail-sec"><h4>Contact responsable</h4><span class="link-chip" onclick="openContactDetail('${resp.id}')"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20a7 7 0 0114 0" stroke="currentColor" stroke-width="1.8"/></svg>${esc(contactName(resp))}</span></div>`:''}
+    ${s.notes?`<div class="detail-sec"><h4>Notes</h4><div class="notes-block">${esc(s.notes)}</div></div>`:''}`;
+  const foot=`<div style="flex:1"></div><button class="btn btn-primary" onclick="editSite('${id}')">Modifier</button>`;
+  openModal(esc(s.nom||'Site'), body, foot);
+}
+
+/* ============================================================
+   INTÉGRATIONS — Gmail OAuth + Résumé IA ; Veille site web
+   ============================================================ */
+let _gisToken=null, _gisClient=null;
+function loadScript(src){
+  return new Promise((res,rej)=>{
+    if([...document.scripts].some(s=>s.src===src)) return res();
+    const el=document.createElement('script'); el.src=src; el.async=true;
+    el.onload=()=>res(); el.onerror=()=>rej(new Error('\u00c9chec du chargement de '+src));
+    document.head.appendChild(el);
+  });
+}
+function getGmailToken(clientId){
+  return loadScript('https://accounts.google.com/gsi/client').then(()=>new Promise((resolve,reject)=>{
+    try{
+      _gisClient = google.accounts.oauth2.initTokenClient({
+        client_id: clientId,
+        scope: 'https://www.googleapis.com/auth/gmail.readonly',
+        callback: (resp)=>{ if(resp&&resp.access_token){ _gisToken=resp.access_token; resolve(resp.access_token); } else reject(new Error('Autorisation Google refus\u00e9e')); },
+        error_callback: ()=>reject(new Error('Connexion Google annul\u00e9e'))
+      });
+      _gisClient.requestAccessToken({prompt: _gisToken?'':'consent'});
+    }catch(e){ reject(e); }
+  }));
+}
+async function anthropicComplete(apiKey, prompt, maxTokens){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:maxTokens||1024,messages:[{role:'user',content:prompt}]})
+  });
+  if(!r.ok){ const t=await r.text().catch(()=>''); throw new Error('Erreur API IA ('+r.status+') '+t.slice(0,160)); }
+  const d=await r.json();
+  return (d.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('\n').trim();
+}
+function aiBox(head, text){
+  return `<div class="ai-summary"><div class="ai-head"><svg viewBox="0 0 24 24" fill="none" width="15" height="15"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>${esc(head)}</div><div class="ai-body">${esc(text).replace(/\n/g,'<br>')}</div></div>`;
+}
+
+async function gmailSummary(contactId){
+  const c=getContact(contactId); if(!c)return;
+  const out=$('gmailResult'), btn=$('gmailBtn');
+  const clientId=((DB.settings&&DB.settings.googleClientId)||'').trim();
+  const apiKey=((DB.settings&&DB.settings.anthropicKey)||'').trim();
+  if(!c.mail){ out.innerHTML=`<div class="info-box warn">Ce contact n'a pas d'adresse mail renseign\u00e9e.</div>`; return; }
+  if(!clientId){ out.innerHTML=`<div class="info-box warn">Identifiant client Google manquant. <a onclick="closeModal();openSettings()">Ouvrir les r\u00e9glages \u2192</a></div>`; return; }
+  if(!apiKey){ out.innerHTML=`<div class="info-box warn">Cl\u00e9 API Anthropic manquante. <a onclick="closeModal();openSettings()">Ouvrir les r\u00e9glages \u2192</a></div>`; return; }
+  const busy=(label)=>{ if(btn)btn.disabled=true; out.innerHTML=`<div class="loading"><span class="spinner"></span>${esc(label)}</div>`; };
+  try{
+    busy('Connexion \u00e0 Gmail\u2026');
+    const token=await getGmailToken(clientId);
+    busy('Recherche des \u00e9changes\u2026');
+    const q=encodeURIComponent(`{from:${c.mail} to:${c.mail}}`);
+    const listResp=await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${q}&maxResults=15`,{headers:{Authorization:'Bearer '+token}});
+    if(!listResp.ok) throw new Error('Erreur Gmail ('+listResp.status+')');
+    const ids=((await listResp.json()).messages||[]).map(m=>m.id);
+    if(!ids.length){ out.innerHTML=`<div class="info-box">Aucun \u00e9change trouv\u00e9 avec ${esc(c.mail)}.</div>`; if(btn)btn.disabled=false; return; }
+    busy(`Lecture de ${ids.length} message${ids.length>1?'s':''}\u2026`);
+    const msgs=[];
+    for(const mid of ids.slice(0,15)){
+      const r=await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${mid}?format=metadata&metadataHeaders=From&metadataHeaders=To&metadataHeaders=Subject&metadataHeaders=Date`,{headers:{Authorization:'Bearer '+token}});
+      if(!r.ok) continue;
+      const d=await r.json();
+      const h=Object.fromEntries((d.payload&&d.payload.headers||[]).map(x=>[x.name,x.value]));
+      msgs.push({date:h.Date||'',from:h.From||'',to:h.To||'',subject:h.Subject||'',snippet:d.snippet||''});
+    }
+    msgs.sort((a,b)=>new Date(a.date)-new Date(b.date));
+    busy('G\u00e9n\u00e9ration du r\u00e9sum\u00e9 (IA)\u2026');
+    const corpus=msgs.map(m=>`\u2014 [${m.date}] ${m.subject}\nDe: ${m.from} | \u00c0: ${m.to}\n${m.snippet}`).join('\n\n');
+    const prompt=`Tu es l'assistant d'un doctorant en arch\u00e9ologie (art rupestre, Maroc). Voici les en-t\u00eates et extraits des courriels \u00e9chang\u00e9s avec ${contactName(c)} (${c.mail}). R\u00e9dige en fran\u00e7ais un r\u00e9sum\u00e9 synth\u00e9tique et structur\u00e9 : sujets principaux, d\u00e9cisions prises, demandes en attente, et prochaines actions \u00e9ventuelles. Reste concis.\n\n${corpus}`;
+    const text=await anthropicComplete(apiKey, prompt, 1024);
+    out.innerHTML=aiBox(`R\u00e9sum\u00e9 des \u00e9changes \u00b7 ${msgs.length} message${msgs.length>1?'s':''}`, text||'(r\u00e9ponse vide)');
+  }catch(e){
+    out.innerHTML=`<div class="info-box warn">${esc(e.message||'Erreur inattendue')}</div>`;
+  }finally{ if(btn)btn.disabled=false; }
+}
+
+async function scanAssocSite(id){
+  const a=getAssoc(id); if(!a||!a.siteWeb)return;
+  const out=$('scanResult'), btn=$('scanBtn');
+  const url=/^https?:\/\//.test(a.siteWeb)?a.siteWeb:'https://'+a.siteWeb;
+  if(btn)btn.disabled=true;
+  out.innerHTML=`<div class="loading"><span class="spinner"></span>R\u00e9cup\u00e9ration de la page\u2026</div>`;
+  try{
+    const proxy='https://api.allorigins.win/raw?url='+encodeURIComponent(url);
+    const r=await fetch(proxy);
+    if(!r.ok) throw new Error('Page inaccessible ('+r.status+')');
+    const html=await r.text();
+    const doc=new DOMParser().parseFromString(html,'text/html');
+    doc.querySelectorAll('script,style,noscript,svg').forEach(e=>e.remove());
+    const text=((doc.body&&doc.body.innerText)||(doc.body&&doc.body.textContent)||'').replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').trim();
+    const apiKey=((DB.settings&&DB.settings.anthropicKey)||'').trim();
+    if(apiKey && text.length>200){
+      out.innerHTML=`<div class="loading"><span class="spinner"></span>Analyse IA du contenu\u2026</div>`;
+      const prompt=`Voici le texte de la page \u00ab ${url} \u00bb de l'association \u00ab ${a.nom} \u00bb. Liste en fran\u00e7ais, en puces courtes, les prochaines missions, sorties, \u00e9v\u00e9nements ou actions annonc\u00e9s (avec dates si pr\u00e9sentes). Si rien n'est clairement annonc\u00e9, dis-le simplement.\n\n${text.slice(0,6500)}`;
+      try{
+        const t=await anthropicComplete(apiKey, prompt, 800);
+        out.innerHTML=aiBox(`Veille \u00b7 ${url.replace(/^https?:\/\//,'')}`, t||'(rien de notable)')
+          +`<div class="muted" style="font-size:11.5px;margin-top:8px"><a href="${esc(url)}" target="_blank" rel="noopener">Ouvrir la page \u2192</a></div>`;
+        if(btn)btn.disabled=false; return;
+      }catch(e){/* repli heuristique ci-dessous */}
+    }
+    const KW=/(mission|sortie|chantier|fouille|conf\u00e9rence|colloque|atelier|r\u00e9union|assembl\u00e9e|exposition|agenda|actualit\u00e9|prochain|\u00e9v\u00e9nement|rendez|stage|prospection|f\u00eate|journ\u00e9e)/i;
+    const lines=text.split(/\n+/).map(l=>l.trim()).filter(l=>l.length>12&&l.length<240);
+    const hits=[...new Set(lines.filter(l=>KW.test(l)))].slice(0,12);
+    if(hits.length){
+      out.innerHTML=`<div class="ai-summary"><div class="ai-head"><svg viewBox="0 0 24 24" fill="none" width="15" height="15"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.7"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Extraits rep\u00e9r\u00e9s</div><div class="ai-body">${hits.map(h=>'\u2022 '+esc(h)).join('<br>')}</div></div><div class="muted" style="font-size:11.5px;margin-top:8px">Extraction heuristique \u2014 \u00e0 v\u00e9rifier. <a href="${esc(url)}" target="_blank" rel="noopener">Ouvrir la page \u2192</a></div>`;
+    } else {
+      out.innerHTML=`<div class="info-box">Aucune annonce clairement identifi\u00e9e sur la page. <a href="${esc(url)}" target="_blank" rel="noopener">Ouvrir la page \u2192</a></div>`;
+    }
+  }catch(e){
+    out.innerHTML=`<div class="info-box warn">${esc(e.message||'\u00c9chec de la r\u00e9cup\u00e9ration')} \u2014 certaines pages bloquent l'acc\u00e8s externe (CORS). <a href="${esc(url)}" target="_blank" rel="noopener">Ouvrir la page \u2192</a></div>`;
+  }finally{ if(btn)btn.disabled=false; }
+}
+
+/* ============================================================
+   RECHERCHE GLOBALE
+   ============================================================ */
+function runSearch(q){
+  q=(q||'').trim().toLowerCase();
+  const box=$('searchResults');
+  if(!q){ box.classList.remove('open'); box.innerHTML=''; return; }
+  const m=(...fs)=>fs.filter(Boolean).join(' \u00b7 ').toLowerCase().includes(q);
+  const groups=[];
+  const ct=DB.contacts.filter(c=>m(c.nom,c.prenom,c.specialite,c.institution,c.laboratoire,c.mail,(c.tags||[]).join(' '))).slice(0,6);
+  if(ct.length) groups.push(['Contacts', ct.map(c=>({ic:'\u25cd',t:contactName(c),s:c.specialite||c.institution||'',fn:`openContactDetail('${c.id}')`}))]);
+  const st=DB.sites.filter(s=>m(s.nom,s.region,s.province,s.periode,(s.traditions||[]).join(' '),(s.tags||[]).join(' '))).slice(0,6);
+  if(st.length) groups.push(['Sites', st.map(s=>({ic:'\u2316',t:s.nom,s:[s.region,s.province].filter(Boolean).join(' \u00b7 '),fn:`openSiteDetail('${s.id}')`}))]);
+  const at=DB.associations.filter(a=>m(a.nom,a.specialite,a.presidentNom,a.adresse,(a.tags||[]).join(' '))).slice(0,6);
+  if(at.length) groups.push(['Associations', at.map(a=>({ic:'\u2b21',t:a.nom,s:a.specialite||'',fn:`openAssocDetail('${a.id}')`}))]);
+  const tk=DB.tasks.filter(t=>m(t.titre,t.description,t.categorie)).slice(0,6);
+  if(tk.length) groups.push(['T\u00e2ches', tk.map(t=>({ic:'\u2713',t:t.titre,s:t.categorie||'',fn:`go('tasks');openTaskDetail('${t.id}')`}))]);
+  const ev=DB.events.filter(e=>m(e.titre,e.lieu,e.notes)).slice(0,6);
+  if(ev.length) groups.push(['Agenda', ev.map(e=>({ic:'\u25f7',t:e.titre,s:isoToShort(e.date),fn:`go('agenda');openEventDetail('${e.id}')`}))]);
+  box.classList.add('open');
+  if(!groups.length){ box.innerHTML=`<div class="sr-empty">Aucun r\u00e9sultat pour \u00ab ${esc(q)} \u00bb</div>`; return; }
+  box.innerHTML=groups.map(([label,items])=>`<div class="sr-group-label">${label}</div>`+
+    items.map(it=>`<div class="sr-item" onclick="closeSearch();${it.fn}"><div class="sr-ic">${it.ic}</div><div class="sr-tx"><b>${esc(it.t)}</b>${it.s?`<span>${esc(it.s)}</span>`:''}</div></div>`).join('')
+  ).join('');
+}
+function closeSearch(){ const b=$('searchResults'); if(b)b.classList.remove('open'); const i=$('globalSearch'); if(i)i.value=''; }
+
+/* ============================================================
+   EXPORT / IMPORT JSON
+   ============================================================ */
+function exportJson(){
+  DB.exportedAt=new Date().toISOString();
+  const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`these-archeo-export-${todayISO()}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  toast('Export t\u00e9l\u00e9charg\u00e9','ok');
+}
+function importJson(){ $('fileInput').click(); }
+function handleImportFile(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    let data; try{ data=JSON.parse(reader.result); }catch(e){ toast('Fichier JSON invalide','err'); return; }
+    if(!data||typeof data!=='object'){ toast('Fichier JSON invalide','err'); return; }
+    if(!confirm('Remplacer toutes les donn\u00e9es actuelles par le fichier import\u00e9 ?')) return;
+    DB=Object.assign(emptyDB(), data);
+    if(!DB.traditions||!DB.traditions.length) DB.traditions=[...DEFAULT_TRADITIONS];
+    if(!DB.settings) DB.settings={googleClientId:'',anthropicKey:''};
+    save(); closeSearch(); render(state.view); toast('Import r\u00e9ussi','ok');
   };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `these-archeo-export-${new Date().toISOString().split('T')[0]}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
+  reader.readAsText(file);
 }
 
-// ══════════════════════════════════════════
-// UTILS
-// ══════════════════════════════════════════
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  const [y, m, d] = dateStr.split('-');
-  const mois = ['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
-  return `${parseInt(d)} ${mois[parseInt(m)-1]} ${y}`;
+/* ============================================================
+   RÉGLAGES
+   ============================================================ */
+function openSettings(){
+  const s=DB.settings||{};
+  const body=`
+    <p class="muted" style="font-size:13px;margin:0 0 14px;line-height:1.55">Ces cl\u00e9s sont stock\u00e9es uniquement dans ce navigateur (localStorage) et ne servent qu'aux appels directs vers Google et Anthropic.</p>
+    <div class="field"><label>Identifiant client Google (OAuth)</label><input id="f_gclient" value="${esc(s.googleClientId||'')}" placeholder="xxxxxxxx.apps.googleusercontent.com"></div>
+    <div class="field"><label>Cl\u00e9 API Anthropic</label><input id="f_akey" type="password" value="${esc(s.anthropicKey||'')}" placeholder="sk-ant-\u2026"></div>
+    <div class="info-box warn" style="margin-top:4px">\u26a0\ufe0e Ne publiez jamais ce fichier avec votre cl\u00e9 API \u00e9crite en clair sur un d\u00e9p\u00f4t public. Saisissez-la ici, sur votre appareil, apr\u00e8s le d\u00e9ploiement.</div>`;
+  const foot=`<div style="flex:1"></div><button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-primary" onclick="saveSettings()">Enregistrer</button>`;
+  openModal('R\u00e9glages', body, foot);
+}
+function saveSettings(){
+  DB.settings=DB.settings||{};
+  DB.settings.googleClientId=$('f_gclient').value.trim();
+  DB.settings.anthropicKey=$('f_akey').value.trim();
+  save(); closeModal(); toast('R\u00e9glages enregistr\u00e9s','ok');
 }
 
-// ── LANCEMENT ──
-init();
+/* ============================================================
+   AJOUT RAPIDE
+   ============================================================ */
+function openQuickAdd(){
+  const body=`<div class="qa-grid">
+    <button class="qa-btn" onclick="closeModal();editTask()"><span class="qa-ic" style="background:#EAD9C6">\u2713</span>T\u00e2che</button>
+    <button class="qa-btn" onclick="closeModal();editEvent()"><span class="qa-ic" style="background:#D9E2D4">\u25f7</span>\u00c9v\u00e9nement</button>
+    <button class="qa-btn" onclick="closeModal();editContact()"><span class="qa-ic" style="background:#E6D6C9">\u25cd</span>Contact</button>
+    <button class="qa-btn" onclick="closeModal();editAssoc()"><span class="qa-ic" style="background:#D9E2D4">\u2b21</span>Association</button>
+    <button class="qa-btn" onclick="closeModal();editSite()"><span class="qa-ic" style="background:#EAD9C6">\u2316</span>Site</button>
+  </div>`;
+  openModal('Ajout rapide', body, '');
+}
+
+/* ============================================================
+   PWA — manifeste & icône générés à l'exécution
+   ============================================================ */
+function makeIcon(size){
+  const cv=document.createElement('canvas'); cv.width=cv.height=size; const x=cv.getContext('2d');
+  x.fillStyle='#1C1917'; x.fillRect(0,0,size,size);
+  const cols=['#465F48','#5C7A5E','#B85C2C','#C99A5B','#E7DBC2'];
+  const h=size/(cols.length+0.5);
+  for(let i=0;i<cols.length;i++){ x.fillStyle=cols[i]; x.fillRect(0, size-(i+1)*h, size, h+1); }
+  x.strokeStyle='#FBF6EC'; x.lineWidth=size*0.045; x.lineJoin='round'; x.lineCap='round';
+  x.beginPath(); x.moveTo(size*0.12,size*0.60); x.lineTo(size*0.34,size*0.30); x.lineTo(size*0.5,size*0.48); x.lineTo(size*0.68,size*0.20); x.lineTo(size*0.88,size*0.58); x.stroke();
+  return cv.toDataURL('image/png');
+}
+function setupPWA(){
+  try{
+    const i192=makeIcon(192), i512=makeIcon(512);
+    const manifest={name:'Carnet de th\u00e8se \u2014 Art rupestre',short_name:'Carnet de th\u00e8se',start_url:'.',scope:'.',display:'standalone',orientation:'portrait',background_color:'#F2EAD8',theme_color:'#1C1917',icons:[{src:i192,sizes:'192x192',type:'image/png'},{src:i512,sizes:'512x512',type:'image/png'}]};
+    const mlink=document.createElement('link'); mlink.rel='manifest';
+    mlink.href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'}));
+    document.head.appendChild(mlink);
+    const apple=document.createElement('link'); apple.rel='apple-touch-icon'; apple.href=i192; document.head.appendChild(apple);
+    let fav=document.querySelector('link[rel="icon"]'); if(!fav){ fav=document.createElement('link'); fav.rel='icon'; document.head.appendChild(fav); } fav.href=i192;
+  }catch(e){ /* PWA non bloquant */ }
+}
+
+/* ============================================================
+   STYLES COMPLÉMENTAIRES (injectés)
+   ============================================================ */
+function injectExtraCSS(){
+  const css=`
+  .info-box{background:var(--sand);border:1px solid var(--line);border-left:3px solid var(--sage);border-radius:10px;padding:11px 13px;font-size:13.5px;line-height:1.55;color:var(--ink);}
+  .info-box.warn{border-left-color:var(--sienna);background:#F7ECE2;}
+  .info-box a{color:var(--sienna);font-weight:600;cursor:pointer;text-decoration:underline;}
+  .loading{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13.5px;padding:6px 2px;}
+  .spinner{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--sienna);border-radius:50%;animation:spin .8s linear infinite;display:inline-block;flex:0 0 auto;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .ai-summary{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--paper);}
+  .ai-head{display:flex;align-items:center;gap:8px;background:var(--sand-deep);padding:9px 13px;font-size:12.5px;font-weight:700;color:var(--ink);}
+  .ai-head svg{color:var(--sienna);}
+  .ai-body{padding:13px;font-size:13.5px;line-height:1.65;color:var(--ink-soft);}
+  .qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .qa-btn{display:flex;flex-direction:column;align-items:center;gap:9px;padding:18px 10px;border:1px solid var(--line);border-radius:14px;background:var(--paper);font-weight:600;font-size:13.5px;color:var(--ink);transition:.16s;cursor:pointer;}
+  .qa-btn:hover{background:var(--sand);transform:translateY(-2px);box-shadow:var(--shadow);}
+  .qa-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;color:var(--ink);}
+  @media(max-width:520px){.qa-grid{grid-template-columns:1fr;}}
+  `;
+  const st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
+}
+
+/* ============================================================
+   INITIALISATION
+   ============================================================ */
+function boot(){
+  injectExtraCSS();
+  setupPWA();
+  load();
+  if(!DB.contacts.length && !DB.sites.length && !DB.associations.length && !DB.tasks.length && !DB.events.length){
+    seedExample(); save();
+  }
+  go('dashboard');
+  const fi=$('fileInput');
+  if(fi) fi.addEventListener('change', e=>{ handleImportFile(e.target.files[0]); e.target.value=''; });
+  document.addEventListener('click', e=>{
+    const wrap=document.querySelector('.search-wrap');
+    if(wrap && !wrap.contains(e.target)){ const b=$('searchResults'); if(b)b.classList.remove('open'); }
+  });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ const sc=$('scrim'); if(sc&&sc.classList.contains('open')) closeModal(); const b=$('searchResults'); if(b)b.classList.remove('open'); } });
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 </script>
 </body>
 </html>
