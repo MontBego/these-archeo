@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Thèse Archéo">
+<title>Thèse Archéo — Suivi de Recherche</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --sable: #F2EAD8;
+    --sable-clair: #FAF6EE;
+    --encre: #1C1917;
+    --encre-douce: #3D3530;
+    --sienne: #B85C2C;
+    --sienne-clair: #E8896A;
+    --sauge: #5C7A5E;
+    --sauge-clair: #8FAF91;
+    --gris: #8C8078;
+    --gris-clair: #D4CCC0;
+    --blanc: #FEFCF8;
+    --rouge-doux: #C0392B;
+    --bleu-doux: #2980B9;
+    --violet-doux: #8E44AD;
+    --or: #D4A017;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--sable);
+    color: var(--encre);
+    min-height: 100vh;
+    font-size: 15px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--encre);
+    color: var(--sable);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(28,25,23,0.3);
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.02em;
+    color: var(--sable);
+  }
+  header span.subtitle {
+    font-size: 0.7rem;
+    color: var(--gris);
+    display: block;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+  .header-actions { display: flex; gap: 8px; }
+  .btn-export {
+    background: var(--sienne);
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-export:hover { background: var(--sienne-clair); }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--blanc);
+    border-bottom: 1px solid var(--gris-clair);
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    position: sticky;
+    top: 60px;
+    z-index: 99;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 12px 18px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--gris);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-tab.active {
+    color: var(--sienne);
+    border-bottom-color: var(--sienne);
+  }
+  .nav-tab:hover { color: var(--encre); }
+  .badge {
+    background: var(--sienne);
+    color: white;
+    border-radius: 10px;
+    padding: 1px 6px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  /* ── SECTIONS ── */
+  .section { display: none; padding: 20px 16px 80px; max-width: 900px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--encre);
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: 0.78rem;
+    color: var(--gris);
+    margin-bottom: 20px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--blanc);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--gris-clair);
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 16px rgba(28,25,23,0.08); }
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .card-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--encre);
+    line-height: 1.3;
+  }
+  .card-meta {
+    font-size: 0.75rem;
+    color: var(--gris);
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+  .card-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .btn-icon {
+    background: none;
+    border: 1px solid var(--gris-clair);
+    border-radius: 6px;
+    padding: 5px 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--gris);
+    transition: all 0.15s;
+  }
+  .btn-icon:hover { border-color: var(--sienne); color: var(--sienne); }
+  .btn-icon.danger:hover { border-color: var(--rouge-doux); color: var(--rouge-doux); }
+
+  /* ── TAGS ── */
+  .tag {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin: 3px 3px 0 0;
+  }
+  .tag-colloque { background: #EDE7F6; color: #6A1B9A; }
+  .tag-papier { background: #E3F2FD; color: #1565C0; }
+  .tag-terrain { background: #E8F5E9; color: #2E7D32; }
+  .tag-asso { background: #FFF3E0; color: #E65100; }
+  .tag-rdv { background: #FCE4EC; color: #AD1457; }
+  .tag-these { background: #F3E5F5; color: #6A1B9A; }
+  .tag-urgent { background: #FFEBEE; color: #B71C1C; }
+  .tag-fait { background: #E8F5E9; color: #1B5E20; }
+
+  /* ── STATUT TÂCHE ── */
+  .statut-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .statut-todo { background: var(--gris-clair); }
+  .statut-encours { background: var(--or); }
+  .statut-fait { background: var(--sauge); }
+  .statut-urgent { background: var(--rouge-doux); }
+
+  /* ── BOUTON AJOUTER ── */
+  .btn-add {
+    background: var(--sienne);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+    margin-bottom: 20px;
+  }
+  .btn-add:hover { background: var(--sienne-clair); }
+
+  /* ── TANKS KANBAN ── */
+  .tanks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .tank {
+    background: var(--sable-clair);
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid var(--gris-clair);
+    min-height: 120px;
+  }
+  .tank-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .tank-title {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--encre-douce);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .tank-icon { font-size: 1rem; }
+  .tank-count {
+    font-size: 0.72rem;
+    background: var(--gris-clair);
+    color: var(--gris);
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .tank-item {
+    background: var(--blanc);
+    border-radius: 7px;
+    padding: 9px 11px;
+    margin-bottom: 7px;
+    font-size: 0.82rem;
+    border-left: 3px solid var(--gris-clair);
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+    line-height: 1.4;
+  }
+  .tank-item:hover { box-shadow: 0 2px 8px rgba(28,25,23,0.1); }
+  .tank-item.urgent { border-left-color: var(--rouge-doux); }
+  .tank-item.encours { border-left-color: var(--or); }
+  .tank-item.fait { border-left-color: var(--sauge); opacity: 0.7; }
+  .tank-item-date { font-size: 0.7rem; color: var(--gris); margin-top: 3px; }
+
+  /* ── AGENDA ── */
+  .agenda-month {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .agenda-month h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+  }
+  .btn-nav {
+    background: var(--blanc);
+    border: 1px solid var(--gris-clair);
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    color: var(--encre);
+    font-size: 0.85rem;
+    transition: all 0.15s;
+  }
+  .btn-nav:hover { border-color: var(--sienne); color: var(--sienne); }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    background: var(--blanc);
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid var(--gris-clair);
+    margin-bottom: 20px;
+  }
+  .cal-day-header {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--gris);
+    padding: 6px 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .cal-day {
+    text-align: center;
+    padding: 8px 2px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    transition: background 0.15s;
+    position: relative;
+    min-height: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .cal-day:hover { background: var(--sable); }
+  .cal-day.today { background: var(--sienne); color: white; border-radius: 6px; }
+  .cal-day.today:hover { background: var(--sienne-clair); }
+  .cal-day.other-month { color: var(--gris-clair); }
+  .cal-day.has-event::after {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--sauge);
+    border-radius: 50%;
+    margin-top: 2px;
+  }
+  .cal-day.today.has-event::after { background: white; }
+  .events-list { margin-top: 8px; }
+  .event-item {
+    background: var(--blanc);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    border-left: 3px solid var(--sienne);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border: 1px solid var(--gris-clair);
+    border-left: 3px solid var(--sienne);
+  }
+  .event-date-block {
+    text-align: center;
+    min-width: 44px;
+    background: var(--sable);
+    border-radius: 6px;
+    padding: 5px 4px;
+  }
+  .event-day { font-size: 1.3rem; font-weight: 700; line-height: 1; color: var(--sienne); }
+  .event-month { font-size: 0.65rem; text-transform: uppercase; color: var(--gris); letter-spacing: 0.05em; }
+  .event-content { flex: 1; }
+  .event-title { font-weight: 600; font-size: 0.88rem; }
+  .event-meta { font-size: 0.75rem; color: var(--gris); margin-top: 3px; }
+
+  /* ── CONTACTS ── */
+  .contact-card {
+    background: var(--blanc);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--gris-clair);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .contact-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--sienne);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .contact-info { flex: 1; }
+  .contact-name { font-weight: 600; font-size: 0.95rem; }
+  .contact-role { font-size: 0.78rem; color: var(--gris); margin-top: 2px; }
+  .contact-details { font-size: 0.78rem; color: var(--encre-douce); margin-top: 6px; line-height: 1.6; }
+  .contact-statut {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 6px;
+    display: inline-block;
+  }
+  .statut-contacte { background: #E8F5E9; color: #2E7D32; }
+  .statut-acontacter { background: #FFF3E0; color: #E65100; }
+  .statut-rencontre { background: #E3F2FD; color: #1565C0; }
+
+  /* ── SITES ── */
+  .site-card {
+    background: var(--blanc);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid var(--gris-clair);
+  }
+  .site-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .site-icon { font-size: 1.2rem; }
+  .site-name { font-weight: 600; font-size: 0.92rem; }
+  .site-region { font-size: 0.75rem; color: var(--gris); }
+  .site-tags { margin-top: 6px; }
+  .tradition-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-right: 4px;
+    margin-top: 3px;
+  }
+  .trad-tazina { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
+  .trad-libyco { background: #EDE7F6; color: #4527A0; border: 1px solid #CE93D8; }
+  .trad-gravure { background: #E8F5E9; color: #1B5E20; border: 1px solid #A5D6A7; }
+  .trad-peinture { background: #FCE4EC; color: #880E4F; border: 1px solid #F48FB1; }
+  .trad-neolithique { background: #E3F2FD; color: #0D47A1; border: 1px solid #90CAF9; }
+
+  /* ── BIBLIO ── */
+  .biblio-card {
+    background: var(--blanc);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid var(--gris-clair);
+    border-left: 3px solid var(--bleu-doux);
+  }
+  .biblio-title { font-weight: 600; font-size: 0.9rem; font-style: italic; color: var(--encre); }
+  .biblio-authors { font-size: 0.78rem; color: var(--sienne); margin-top: 3px; font-weight: 500; }
+  .biblio-source { font-size: 0.75rem; color: var(--gris); margin-top: 3px; }
+  .biblio-tags { margin-top: 6px; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(28,25,23,0.6);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--blanc);
+    border-radius: 16px 16px 0 0;
+    padding: 24px 20px 40px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(60px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: var(--encre);
+  }
+  .form-group { margin-bottom: 14px; }
+  .form-group label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--encre-douce);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--gris-clair);
+    border-radius: 7px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    color: var(--encre);
+    background: var(--sable-clair);
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--sienne);
+    background: var(--blanc);
+  }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+  .btn-primary {
+    flex: 1;
+    background: var(--sienne);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--sienne-clair); }
+  .btn-secondary {
+    background: var(--sable);
+    color: var(--encre);
+    border: 1px solid var(--gris-clair);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-secondary:hover { background: var(--gris-clair); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gris);
+  }
+  .empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
+  .empty-state p { font-size: 0.85rem; line-height: 1.6; }
+
+  /* ── STATS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--blanc);
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid var(--gris-clair);
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--sienne);
+    font-weight: 400;
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.72rem; color: var(--gris); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  /* ── FILTRE ── */
+  .filtres {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .filtre-btn {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--gris-clair);
+    background: var(--blanc);
+    font-size: 0.75rem;
+    cursor: pointer;
+    color: var(--gris);
+    transition: all 0.15s;
+  }
+  .filtre-btn.active, .filtre-btn:hover {
+    background: var(--sienne);
+    color: white;
+    border-color: var(--sienne);
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gris-clair); border-radius: 3px; }
+
+  @media (min-width: 600px) {
+    .stats-grid { grid-template-columns: repeat(4, 1fr); }
+    .modal { border-radius: 16px; margin: 20px; }
+    .modal-overlay { align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Thèse Archéo</h1>
+    <span class="subtitle">Suivi de Recherche · Maroc</span>
+  </div>
+  <div class="header-actions">
+    <button class="btn-export" onclick="exporterDonnees()">↓ Export</button>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-tab active" onclick="changerSection('tableau')">🗂 Tableau</div>
+  <div class="nav-tab" onclick="changerSection('taches')">✓ Tâches <span class="badge" id="badge-taches">0</span></div>
+  <div class="nav-tab" onclick="changerSection('agenda')">📅 Agenda</div>
+  <div class="nav-tab" onclick="changerSection('contacts')">👥 Réseau</div>
+  <div class="nav-tab" onclick="changerSection('sites')">🗺 Sites</div>
+  <div class="nav-tab" onclick="changerSection('biblio')">📚 Biblio</div>
+</nav>
+
+<!-- ══════════ TABLEAU DE BORD ══════════ -->
+<section id="section-tableau" class="section active">
+  <p class="section-title">Tableau de bord</p>
+  <p class="section-sub">Vue d'ensemble de ta recherche</p>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-taches">0</div>
+      <div class="stat-label">Tâches actives</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-events">0</div>
+      <div class="stat-label">Événements</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-contacts">0</div>
+      <div class="stat-label">Contacts</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-sites">0</div>
+      <div class="stat-label">Sites</div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1.05rem; margin-bottom:14px;">Tanks de travail</div>
+  <div class="tanks-grid" id="tanks-container"></div>
+
+  <div class="section-title" style="font-size:1.05rem; margin-bottom:14px;">Prochains événements</div>
+  <div id="prochains-events"></div>
+</section>
+
+<!-- ══════════ TÂCHES ══════════ -->
+<section id="section-taches" class="section">
+  <p class="section-title">Tâches</p>
+  <p class="section-sub">Gère tes actions, projets et démarches</p>
+
+  <button class="btn-add" onclick="ouvrirModal('tache')">+ Nouvelle tâche</button>
+
+  <div class="filtres" id="filtres-taches">
+    <button class="filtre-btn active" onclick="filtrerTaches('tous')">Toutes</button>
+    <button class="filtre-btn" onclick="filtrerTaches('colloque')">🎤 Colloques</button>
+    <button class="filtre-btn" onclick="filtrerTaches('papier')">📄 Papiers</button>
+    <button class="filtre-btn" onclick="filtrerTaches('terrain')">🏜 Terrain</button>
+    <button class="filtre-btn" onclick="filtrerTaches('asso')">🤝 Associations</button>
+    <button class="filtre-btn" onclick="filtrerTaches('rdv')">📞 RDV</button>
+    <button class="filtre-btn" onclick="filtrerTaches('these')">🎓 Thèse</button>
+  </div>
+
+  <div id="liste-taches"></div>
+</section>
+
+<!-- ══════════ AGENDA ══════════ -->
+<section id="section-agenda" class="section">
+  <p class="section-title">Agenda</p>
+  <p class="section-sub">Calendrier et événements</p>
+
+  <button class="btn-add" onclick="ouvrirModal('event')">+ Nouvel événement</button>
+
+  <div class="agenda-month">
+    <button class="btn-nav" onclick="changerMois(-1)">‹</button>
+    <h2 id="titre-mois"></h2>
+    <button class="btn-nav" onclick="changerMois(1)">›</button>
+  </div>
+  <div class="cal-grid" id="calendrier"></div>
+
+  <div class="section-title" style="font-size:1rem; margin-bottom:12px;">Événements du mois</div>
+  <div id="liste-events"></div>
+</section>
+
+<!-- ══════════ CONTACTS ══════════ -->
+<section id="section-contacts" class="section">
+  <p class="section-title">Réseau</p>
+  <p class="section-sub">Chercheurs, institutions et collaborateurs</p>
+
+  <button class="btn-add" onclick="ouvrirModal('contact')">+ Nouveau contact</button>
+
+  <div class="filtres">
+    <button class="filtre-btn active" onclick="filtrerContacts('tous')">Tous</button>
+    <button class="filtre-btn" onclick="filtrerContacts('acontacter')">À contacter</button>
+    <button class="filtre-btn" onclick="filtrerContacts('contacte')">Contactés</button>
+    <button class="filtre-btn" onclick="filtrerContacts('rencontre')">Rencontrés</button>
+  </div>
+
+  <div id="liste-contacts"></div>
+</section>
+
+<!-- ══════════ SITES ══════════ -->
+<section id="section-sites" class="section">
+  <p class="section-title">Sites archéologiques</p>
+  <p class="section-sub">Inventaire des sites au Maroc</p>
+
+  <button class="btn-add" onclick="ouvrirModal('site')">+ Nouveau site</button>
+
+  <div class="filtres" id="filtres-sites">
+    <button class="filtre-btn active" onclick="filtrerSites('tous')">Tous</button>
+    <button class="filtre-btn" onclick="filtrerSites('Tazina')">Tazina</button>
+    <button class="filtre-btn" onclick="filtrerSites('Libyco-Berbère')">Libyco-Berbère</button>
+    <button class="filtre-btn" onclick="filtrerSites('Gravure')">Gravures</button>
+    <button class="filtre-btn" onclick="filtrerSites('Peinture')">Peintures</button>
+  </div>
+
+  <div id="liste-sites"></div>
+</section>
+
+<!-- ══════════ BIBLIOGRAPHIE ══════════ -->
+<section id="section-biblio" class="section">
+  <p class="section-title">Bibliographie</p>
+  <p class="section-sub">Références liées à ta recherche</p>
+
+  <button class="btn-add" onclick="ouvrirModal('biblio')">+ Nouvelle référence</button>
+
+  <div class="filtres">
+    <button class="filtre-btn active" onclick="filtrerBiblio('tous')">Toutes</button>
+    <button class="filtre-btn" onclick="filtrerBiblio('art-rupestre')">Art rupestre</button>
+    <button class="filtre-btn" onclick="filtrerBiblio('prehistoire')">Préhistoire</button>
+    <button class="filtre-btn" onclick="filtrerBiblio('methode')">Méthode</button>
+    <button class="filtre-btn" onclick="filtrerBiblio('maroc')">Maroc</button>
+  </div>
+
+  <div id="liste-biblio"></div>
+</section>
+
+<!-- ══════════ MODALS ══════════ -->
+
+<!-- Modal Tâche -->
+<div class="modal-overlay" id="modal-tache">
+  <div class="modal">
+    <div class="modal-title" id="modal-tache-titre">Nouvelle tâche</div>
+    <div class="form-group">
+      <label>Titre</label>
+      <input type="text" id="t-titre" placeholder="Description de la tâche">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Catégorie</label>
+        <select id="t-cat">
+          <option value="colloque">🎤 Colloque</option>
+          <option value="papier">📄 Papier</option>
+          <option value="terrain">🏜 Terrain</option>
+          <option value="asso">🤝 Association</option>
+          <option value="rdv">📞 RDV</option>
+          <option value="these">🎓 Thèse</option>
+          <option value="autre">Autre</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Statut</label>
+        <select id="t-statut">
+          <option value="todo">À faire</option>
+          <option value="encours">En cours</option>
+          <option value="urgent">Urgent</option>
+          <option value="fait">Fait</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Échéance</label>
+      <input type="date" id="t-date">
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="t-notes" placeholder="Détails, liens, contexte…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="fermerModal('tache')">Annuler</button>
+      <button class="btn-primary" onclick="sauvegarderTache()">Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Événement -->
+<div class="modal-overlay" id="modal-event">
+  <div class="modal">
+    <div class="modal-title">Nouvel événement</div>
+    <div class="form-group">
+      <label>Titre</label>
+      <input type="text" id="e-titre" placeholder="Nom de l'événement">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="e-date">
+      </div>
+      <div class="form-group">
+        <label>Type</label>
+        <select id="e-type">
+          <option value="colloque">Colloque</option>
+          <option value="rdv">Rendez-vous</option>
+          <option value="terrain">Terrain</option>
+          <option value="soutenance">Soutenance</option>
+          <option value="deadline">Deadline</option>
+          <option value="autre">Autre</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Lieu</label>
+      <input type="text" id="e-lieu" placeholder="Ville, institution…">
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="e-notes" placeholder="Programme, contacts, infos pratiques…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="fermerModal('event')">Annuler</button>
+      <button class="btn-primary" onclick="sauvegarderEvent()">Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Contact -->
+<div class="modal-overlay" id="modal-contact">
+  <div class="modal">
+    <div class="modal-title">Nouveau contact</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Prénom</label>
+        <input type="text" id="c-prenom" placeholder="Prénom">
+      </div>
+      <div class="form-group">
+        <label>Nom</label>
+        <input type="text" id="c-nom" placeholder="Nom">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Institution / Université</label>
+      <input type="text" id="c-instit" placeholder="CNRS, Université de…">
+    </div>
+    <div class="form-group">
+      <label>Spécialité / Rôle</label>
+      <input type="text" id="c-role" placeholder="Préhistorien, archéologue rupestre…">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="c-email" placeholder="email@…">
+      </div>
+      <div class="form-group">
+        <label>Statut</label>
+        <select id="c-statut">
+          <option value="acontacter">À contacter</option>
+          <option value="contacte">Contacté</option>
+          <option value="rencontre">Rencontré</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Articles / Publications liés</label>
+      <textarea id="c-articles" placeholder="Titre des articles, années…"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="c-notes" placeholder="Contexte, sujets d'intérêt commun…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="fermerModal('contact')">Annuler</button>
+      <button class="btn-primary" onclick="sauvegarderContact()">Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Site -->
+<div class="modal-overlay" id="modal-site">
+  <div class="modal">
+    <div class="modal-title">Nouveau site archéologique</div>
+    <div class="form-group">
+      <label>Nom du site</label>
+      <input type="text" id="s-nom" placeholder="Nom / toponyme">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Région</label>
+        <input type="text" id="s-region" placeholder="Anti-Atlas, Draa…">
+      </div>
+      <div class="form-group">
+        <label>Province</label>
+        <input type="text" id="s-province" placeholder="Province marocaine">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Latitude</label>
+        <input type="number" id="s-lat" placeholder="30.xxxx" step="0.0001">
+      </div>
+      <div class="form-group">
+        <label>Longitude</label>
+        <input type="number" id="s-lon" placeholder="-8.xxxx" step="0.0001">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Traditions stylistiques</label>
+      <select id="s-tradition" multiple style="height:90px;">
+        <option value="Tazina">Tazina</option>
+        <option value="Libyco-Berbère">Libyco-Berbère</option>
+        <option value="Gravure">Gravures rupestres</option>
+        <option value="Peinture">Peintures</option>
+        <option value="Néolithique">Néolithique</option>
+      </select>
+      <small style="color:var(--gris);font-size:0.72rem;margin-top:4px;display:block;">Maintenir Ctrl/Cmd pour sélectionner plusieurs</small>
+    </div>
+    <div class="form-group">
+      <label>Période</label>
+      <input type="text" id="s-periode" placeholder="Holocène, Bronze, Néolithique…">
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="s-notes" placeholder="Description, état de conservation, accès…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="fermerModal('site')">Annuler</button>
+      <button class="btn-primary" onclick="sauvegarderSite()">Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Bibliographie -->
+<div class="modal-overlay" id="modal-biblio">
+  <div class="modal">
+    <div class="modal-title">Nouvelle référence</div>
+    <div class="form-group">
+      <label>Titre</label>
+      <textarea id="b-titre" placeholder="Titre complet de l'article/ouvrage…" style="min-height:60px;"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Auteur(s)</label>
+      <input type="text" id="b-auteurs" placeholder="Nom, Prénom ; Nom, Prénom…">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Année</label>
+        <input type="number" id="b-annee" placeholder="2023" min="1800" max="2030">
+      </div>
+      <div class="form-group">
+        <label>Type</label>
+        <select id="b-type">
+          <option value="article">Article</option>
+          <option value="ouvrage">Ouvrage</option>
+          <option value="chapitre">Chapitre</option>
+          <option value="these">Thèse</option>
+          <option value="actes">Actes de colloque</option>
+          <option value="rapport">Rapport</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Revue / Éditeur</label>
+      <input type="text" id="b-source" placeholder="Journal of African Archaeology…">
+    </div>
+    <div class="form-group">
+      <label>Mots-clés</label>
+      <input type="text" id="b-tags" placeholder="art-rupestre, maroc, prehistoire…">
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="b-notes" placeholder="Résumé, intérêt pour ta thèse…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="fermerModal('biblio')">Annuler</button>
+      <button class="btn-primary" onclick="sauvegarderBiblio()">Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DONNÉES
+// ══════════════════════════════════════════
+let DB = {
+  taches: [],
+  events: [],
+  contacts: [],
+  sites: [],
+  biblio: []
+};
+
+let editIndex = { tache: null, event: null, contact: null, site: null, biblio: null };
+let moisCourant = new Date();
+let filtreActif = { taches: 'tous', contacts: 'tous', sites: 'tous', biblio: 'tous' };
+
+// ── INIT ──
+function init() {
+  const saved = localStorage.getItem('these-archeo-db');
+  if (saved) {
+    try { DB = JSON.parse(saved); } catch(e) {}
+  }
+  // Assurer les tableaux
+  ['taches','events','contacts','sites','biblio'].forEach(k => {
+    if (!DB[k]) DB[k] = [];
+  });
+  rafraichirTout();
+}
+
+function sauvegarder() {
+  localStorage.setItem('these-archeo-db', JSON.stringify(DB));
+}
+
+function rafraichirTout() {
+  renderTaches();
+  renderEvents();
+  renderCalendrier();
+  renderContacts();
+  renderSites();
+  renderBiblio();
+  renderTableau();
+  updateBadges();
+}
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function changerSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (id === 'agenda') renderCalendrier();
+}
+
+function updateBadges() {
+  const actives = DB.taches.filter(t => t.statut !== 'fait').length;
+  document.getElementById('badge-taches').textContent = actives;
+}
+
+// ══════════════════════════════════════════
+// MODALS
+// ══════════════════════════════════════════
+function ouvrirModal(type, index) {
+  editIndex[type] = index !== undefined ? index : null;
+  const overlay = document.getElementById('modal-' + type);
+  overlay.classList.add('open');
+
+  if (type === 'tache' && index !== undefined) {
+    const t = DB.taches[index];
+    document.getElementById('modal-tache-titre').textContent = 'Modifier la tâche';
+    document.getElementById('t-titre').value = t.titre;
+    document.getElementById('t-cat').value = t.cat;
+    document.getElementById('t-statut').value = t.statut;
+    document.getElementById('t-date').value = t.date || '';
+    document.getElementById('t-notes').value = t.notes || '';
+  } else if (type === 'tache') {
+    document.getElementById('modal-tache-titre').textContent = 'Nouvelle tâche';
+    ['t-titre','t-date','t-notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('t-cat').value = 'colloque';
+    document.getElementById('t-statut').value = 'todo';
+  }
+  if (type === 'contact' && index !== undefined) {
+    const c = DB.contacts[index];
+    document.getElementById('c-prenom').value = c.prenom;
+    document.getElementById('c-nom').value = c.nom;
+    document.getElementById('c-instit').value = c.instit || '';
+    document.getElementById('c-role').value = c.role || '';
+    document.getElementById('c-email').value = c.email || '';
+    document.getElementById('c-statut').value = c.statut;
+    document.getElementById('c-articles').value = c.articles || '';
+    document.getElementById('c-notes').value = c.notes || '';
+  } else if (type === 'contact') {
+    ['c-prenom','c-nom','c-instit','c-role','c-email','c-articles','c-notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('c-statut').value = 'acontacter';
+  }
+  if (type === 'site' && index !== undefined) {
+    const s = DB.sites[index];
+    document.getElementById('s-nom').value = s.nom;
+    document.getElementById('s-region').value = s.region || '';
+    document.getElementById('s-province').value = s.province || '';
+    document.getElementById('s-lat').value = s.lat || '';
+    document.getElementById('s-lon').value = s.lon || '';
+    document.getElementById('s-periode').value = s.periode || '';
+    document.getElementById('s-notes').value = s.notes || '';
+    // traditions
+    const sel = document.getElementById('s-tradition');
+    const trads = s.traditions || [];
+    for (let opt of sel.options) opt.selected = trads.includes(opt.value);
+  } else if (type === 'site') {
+    ['s-nom','s-region','s-province','s-lat','s-lon','s-periode','s-notes'].forEach(id => document.getElementById(id).value = '');
+    const sel = document.getElementById('s-tradition');
+    for (let opt of sel.options) opt.selected = false;
+  }
+  if (type === 'biblio' && index !== undefined) {
+    const b = DB.biblio[index];
+    document.getElementById('b-titre').value = b.titre;
+    document.getElementById('b-auteurs').value = b.auteurs;
+    document.getElementById('b-annee').value = b.annee || '';
+    document.getElementById('b-type').value = b.type || 'article';
+    document.getElementById('b-source').value = b.source || '';
+    document.getElementById('b-tags').value = b.tags || '';
+    document.getElementById('b-notes').value = b.notes || '';
+  } else if (type === 'biblio') {
+    ['b-titre','b-auteurs','b-annee','b-source','b-tags','b-notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('b-type').value = 'article';
+  }
+}
+
+function fermerModal(type) {
+  document.getElementById('modal-' + type).classList.remove('open');
+  editIndex[type] = null;
+}
+
+// Fermer en cliquant l'overlay
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', function(e) {
+    if (e.target === this) {
+      const type = this.id.replace('modal-','');
+      fermerModal(type);
+    }
+  });
+});
+
+// ══════════════════════════════════════════
+// TÂCHES
+// ══════════════════════════════════════════
+function sauvegarderTache() {
+  const titre = document.getElementById('t-titre').value.trim();
+  if (!titre) return alert('Titre requis');
+  const tache = {
+    id: editIndex.tache !== null ? DB.taches[editIndex.tache].id : Date.now(),
+    titre,
+    cat: document.getElementById('t-cat').value,
+    statut: document.getElementById('t-statut').value,
+    date: document.getElementById('t-date').value,
+    notes: document.getElementById('t-notes').value.trim(),
+    cree: editIndex.tache !== null ? DB.taches[editIndex.tache].cree : new Date().toISOString()
+  };
+  if (editIndex.tache !== null) DB.taches[editIndex.tache] = tache;
+  else DB.taches.unshift(tache);
+  sauvegarder();
+  fermerModal('tache');
+  renderTaches();
+  renderTableau();
+  updateBadges();
+}
+
+function supprimerTache(i) {
+  if (confirm('Supprimer cette tâche ?')) {
+    DB.taches.splice(i, 1);
+    sauvegarder();
+    renderTaches();
+    renderTableau();
+    updateBadges();
+  }
+}
+
+function toggleStatutTache(i) {
+  const t = DB.taches[i];
+  const cycle = ['todo','encours','urgent','fait'];
+  t.statut = cycle[(cycle.indexOf(t.statut) + 1) % cycle.length];
+  sauvegarder();
+  renderTaches();
+  renderTableau();
+  updateBadges();
+}
+
+function filtrerTaches(cat) {
+  filtreActif.taches = cat;
+  document.querySelectorAll('#filtres-taches .filtre-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  renderTaches();
+}
+
+function renderTaches() {
+  const el = document.getElementById('liste-taches');
+  let taches = [...DB.taches];
+  if (filtreActif.taches !== 'tous') taches = taches.filter(t => t.cat === filtreActif.taches);
+  if (!taches.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">✓</div><p>Aucune tâche pour l\'instant.<br>Crée ta première tâche ci-dessus.</p></div>';
+    return;
+  }
+  const statutLabel = { todo: 'À faire', encours: 'En cours', urgent: 'Urgent !', fait: 'Fait' };
+  el.innerHTML = taches.map((t, i) => {
+    const realIdx = DB.taches.indexOf(t);
+    const tagClass = `tag-${t.cat}`;
+    const icons = { colloque:'🎤', papier:'📄', terrain:'🏜', asso:'🤝', rdv:'📞', these:'🎓', autre:'•' };
+    const dateStr = t.date ? `Échéance : ${formatDate(t.date)}` : '';
+    return `<div class="card">
+      <div class="card-header">
+        <div style="display:flex;gap:10px;align-items:flex-start;flex:1">
+          <div class="statut-dot statut-${t.statut}" style="cursor:pointer;margin-top:5px;" onclick="toggleStatutTache(${realIdx})" title="Changer le statut"></div>
+          <div style="flex:1">
+            <div class="card-title" style="${t.statut==='fait'?'text-decoration:line-through;opacity:0.6':''}">${t.titre}</div>
+            <div class="card-meta">
+              <span class="tag ${tagClass}">${icons[t.cat]||'•'} ${t.cat}</span>
+              ${dateStr ? `<span style="margin-left:8px;">${dateStr}</span>` : ''}
+              <br><small style="font-style:italic;">${statutLabel[t.statut]}</small>
+            </div>
+            ${t.notes ? `<div style="font-size:0.78rem;color:var(--encre-douce);margin-top:6px;padding-top:6px;border-top:1px solid var(--gris-clair);">${t.notes}</div>` : ''}
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-icon" onclick="ouvrirModal('tache', ${realIdx})">✏️</button>
+          <button class="btn-icon danger" onclick="supprimerTache(${realIdx})">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// ÉVÉNEMENTS / AGENDA
+// ══════════════════════════════════════════
+function sauvegarderEvent() {
+  const titre = document.getElementById('e-titre').value.trim();
+  const date = document.getElementById('e-date').value;
+  if (!titre || !date) return alert('Titre et date requis');
+  const ev = {
+    id: Date.now(),
+    titre,
+    date,
+    type: document.getElementById('e-type').value,
+    lieu: document.getElementById('e-lieu').value.trim(),
+    notes: document.getElementById('e-notes').value.trim()
+  };
+  DB.events.push(ev);
+  DB.events.sort((a, b) => a.date.localeCompare(b.date));
+  sauvegarder();
+  fermerModal('event');
+  renderCalendrier();
+  renderEvents();
+  renderTableau();
+}
+
+function supprimerEvent(i) {
+  if (confirm('Supprimer cet événement ?')) {
+    DB.events.splice(i, 1);
+    sauvegarder();
+    renderCalendrier();
+    renderEvents();
+    renderTableau();
+  }
+}
+
+function changerMois(delta) {
+  moisCourant = new Date(moisCourant.getFullYear(), moisCourant.getMonth() + delta, 1);
+  renderCalendrier();
+  renderEvents();
+}
+
+function renderCalendrier() {
+  const mois = moisCourant.getMonth();
+  const an = moisCourant.getFullYear();
+  const noms = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  document.getElementById('titre-mois').textContent = `${noms[mois]} ${an}`;
+
+  const premier = new Date(an, mois, 1);
+  const dernier = new Date(an, mois + 1, 0);
+  let jourDebut = premier.getDay(); if (jourDebut === 0) jourDebut = 7;
+  const aujourd = new Date().toISOString().split('T')[0];
+  const datesEvents = DB.events.map(e => e.date);
+
+  let html = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'].map(j => `<div class="cal-day-header">${j}</div>`).join('');
+
+  for (let i = 1; i < jourDebut; i++) {
+    const d = new Date(an, mois, 1 - (jourDebut - i));
+    html += `<div class="cal-day other-month">${d.getDate()}</div>`;
+  }
+  for (let d = 1; d <= dernier.getDate(); d++) {
+    const dateStr = `${an}-${String(mois+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = dateStr === aujourd;
+    const hasEv = datesEvents.includes(dateStr);
+    html += `<div class="cal-day${isToday?' today':''}${hasEv?' has-event':''}">${d}</div>`;
+  }
+  document.getElementById('calendrier').innerHTML = html;
+}
+
+function renderEvents() {
+  const el = document.getElementById('liste-events');
+  const mois = moisCourant.getMonth();
+  const an = moisCourant.getFullYear();
+  const prefix = `${an}-${String(mois+1).padStart(2,'0')}`;
+  const evs = DB.events.filter(e => e.date.startsWith(prefix));
+  if (!evs.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">📅</div><p>Aucun événement ce mois-ci.</p></div>';
+    return;
+  }
+  el.innerHTML = evs.map(e => {
+    const i = DB.events.indexOf(e);
+    const date = new Date(e.date + 'T00:00:00');
+    const moisNoms = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+    return `<div class="event-item">
+      <div class="event-date-block">
+        <div class="event-day">${date.getDate()}</div>
+        <div class="event-month">${moisNoms[date.getMonth()]}</div>
+      </div>
+      <div class="event-content">
+        <div class="event-title">${e.titre}</div>
+        <div class="event-meta">${e.type}${e.lieu ? ' · ' + e.lieu : ''}${e.notes ? '<br>' + e.notes : ''}</div>
+      </div>
+      <button class="btn-icon danger" onclick="supprimerEvent(${i})" style="align-self:flex-start">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// CONTACTS
+// ══════════════════════════════════════════
+function sauvegarderContact() {
+  const prenom = document.getElementById('c-prenom').value.trim();
+  const nom = document.getElementById('c-nom').value.trim();
+  if (!nom) return alert('Nom requis');
+  const contact = {
+    id: editIndex.contact !== null ? DB.contacts[editIndex.contact].id : Date.now(),
+    prenom, nom,
+    instit: document.getElementById('c-instit').value.trim(),
+    role: document.getElementById('c-role').value.trim(),
+    email: document.getElementById('c-email').value.trim(),
+    statut: document.getElementById('c-statut').value,
+    articles: document.getElementById('c-articles').value.trim(),
+    notes: document.getElementById('c-notes').value.trim()
+  };
+  if (editIndex.contact !== null) DB.contacts[editIndex.contact] = contact;
+  else DB.contacts.unshift(contact);
+  sauvegarder();
+  fermerModal('contact');
+  renderContacts();
+  renderTableau();
+}
+
+function supprimerContact(i) {
+  if (confirm('Supprimer ce contact ?')) {
+    DB.contacts.splice(i, 1);
+    sauvegarder();
+    renderContacts();
+    renderTableau();
+  }
+}
+
+function filtrerContacts(statut) {
+  filtreActif.contacts = statut;
+  document.querySelectorAll('#section-contacts .filtre-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  renderContacts();
+}
+
+function renderContacts() {
+  const el = document.getElementById('liste-contacts');
+  let contacts = [...DB.contacts];
+  if (filtreActif.contacts !== 'tous') contacts = contacts.filter(c => c.statut === filtreActif.contacts);
+  if (!contacts.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">👥</div><p>Aucun contact enregistré.<br>Construis ton réseau de chercheurs.</p></div>';
+    return;
+  }
+  const statutLabels = { acontacter: 'À contacter', contacte: 'Contacté', rencontre: 'Rencontré' };
+  el.innerHTML = contacts.map(c => {
+    const realIdx = DB.contacts.indexOf(c);
+    const initiales = `${c.prenom ? c.prenom[0] : ''}${c.nom[0]}`.toUpperCase();
+    return `<div class="contact-card">
+      <div class="contact-avatar">${initiales}</div>
+      <div class="contact-info" style="flex:1">
+        <div class="contact-name">${c.prenom} ${c.nom}</div>
+        <div class="contact-role">${c.role || ''} ${c.instit ? '· ' + c.instit : ''}</div>
+        <div class="contact-details">
+          ${c.email ? `📧 ${c.email}` : ''}
+          ${c.articles ? `<br>📄 ${c.articles}` : ''}
+          ${c.notes ? `<br><em>${c.notes}</em>` : ''}
+        </div>
+        <span class="contact-statut statut-${c.statut}">${statutLabels[c.statut]}</span>
+      </div>
+      <div class="card-actions" style="flex-direction:column;">
+        <button class="btn-icon" onclick="ouvrirModal('contact', ${realIdx})">✏️</button>
+        <button class="btn-icon danger" onclick="supprimerContact(${realIdx})">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// SITES
+// ══════════════════════════════════════════
+function sauvegarderSite() {
+  const nom = document.getElementById('s-nom').value.trim();
+  if (!nom) return alert('Nom requis');
+  const sel = document.getElementById('s-tradition');
+  const traditions = Array.from(sel.selectedOptions).map(o => o.value);
+  const site = {
+    id: editIndex.site !== null ? DB.sites[editIndex.site].id : Date.now(),
+    nom,
+    region: document.getElementById('s-region').value.trim(),
+    province: document.getElementById('s-province').value.trim(),
+    lat: document.getElementById('s-lat').value,
+    lon: document.getElementById('s-lon').value,
+    traditions,
+    periode: document.getElementById('s-periode').value.trim(),
+    notes: document.getElementById('s-notes').value.trim()
+  };
+  if (editIndex.site !== null) DB.sites[editIndex.site] = site;
+  else DB.sites.unshift(site);
+  sauvegarder();
+  fermerModal('site');
+  renderSites();
+  renderTableau();
+}
+
+function supprimerSite(i) {
+  if (confirm('Supprimer ce site ?')) {
+    DB.sites.splice(i, 1);
+    sauvegarder();
+    renderSites();
+    renderTableau();
+  }
+}
+
+function filtrerSites(trad) {
+  filtreActif.sites = trad;
+  document.querySelectorAll('#filtres-sites .filtre-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  renderSites();
+}
+
+function renderSites() {
+  const el = document.getElementById('liste-sites');
+  let sites = [...DB.sites];
+  if (filtreActif.sites !== 'tous') sites = sites.filter(s => (s.traditions||[]).includes(filtreActif.sites));
+  if (!sites.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">🗺</div><p>Aucun site enregistré.<br>Ajoute tes sites archéologiques marocains.</p></div>';
+    return;
+  }
+  const tradClass = { 'Tazina':'trad-tazina', 'Libyco-Berbère':'trad-libyco', 'Gravure':'trad-gravure', 'Peinture':'trad-peinture', 'Néolithique':'trad-neolithique' };
+  el.innerHTML = sites.map(s => {
+    const realIdx = DB.sites.indexOf(s);
+    const trads = (s.traditions||[]).map(t => `<span class="tradition-badge ${tradClass[t]||''}">${t}</span>`).join('');
+    const coords = (s.lat && s.lon) ? `${parseFloat(s.lat).toFixed(4)}° N, ${parseFloat(s.lon).toFixed(4)}° E` : '';
+    return `<div class="site-card">
+      <div class="card-header">
+        <div style="flex:1">
+          <div class="site-header">
+            <span class="site-icon">🗿</span>
+            <div>
+              <div class="site-name">${s.nom}</div>
+              <div class="site-region">${s.region || ''}${s.province ? ' · ' + s.province : ''}${coords ? ' · ' + coords : ''}</div>
+            </div>
+          </div>
+          <div class="site-tags">${trads}</div>
+          ${s.periode ? `<div style="font-size:0.75rem;color:var(--gris);margin-top:5px;">Période : ${s.periode}</div>` : ''}
+          ${s.notes ? `<div style="font-size:0.78rem;color:var(--encre-douce);margin-top:6px;">${s.notes}</div>` : ''}
+        </div>
+        <div class="card-actions">
+          <button class="btn-icon" onclick="ouvrirModal('site', ${realIdx})">✏️</button>
+          <button class="btn-icon danger" onclick="supprimerSite(${realIdx})">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// BIBLIOGRAPHIE
+// ══════════════════════════════════════════
+function sauvegarderBiblio() {
+  const titre = document.getElementById('b-titre').value.trim();
+  const auteurs = document.getElementById('b-auteurs').value.trim();
+  if (!titre) return alert('Titre requis');
+  const ref = {
+    id: editIndex.biblio !== null ? DB.biblio[editIndex.biblio].id : Date.now(),
+    titre, auteurs,
+    annee: document.getElementById('b-annee').value,
+    type: document.getElementById('b-type').value,
+    source: document.getElementById('b-source').value.trim(),
+    tags: document.getElementById('b-tags').value.trim(),
+    notes: document.getElementById('b-notes').value.trim()
+  };
+  if (editIndex.biblio !== null) DB.biblio[editIndex.biblio] = ref;
+  else DB.biblio.unshift(ref);
+  sauvegarder();
+  fermerModal('biblio');
+  renderBiblio();
+  renderTableau();
+}
+
+function supprimerBiblio(i) {
+  if (confirm('Supprimer cette référence ?')) {
+    DB.biblio.splice(i, 1);
+    sauvegarder();
+    renderBiblio();
+    renderTableau();
+  }
+}
+
+function filtrerBiblio(tag) {
+  filtreActif.biblio = tag;
+  document.querySelectorAll('#section-biblio .filtre-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  renderBiblio();
+}
+
+function renderBiblio() {
+  const el = document.getElementById('liste-biblio');
+  let refs = [...DB.biblio];
+  if (filtreActif.biblio !== 'tous') {
+    refs = refs.filter(b => (b.tags||'').toLowerCase().includes(filtreActif.biblio));
+  }
+  if (!refs.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">📚</div><p>Aucune référence enregistrée.<br>Commence ta bibliographie de thèse.</p></div>';
+    return;
+  }
+  const typeIcons = { article:'📄', ouvrage:'📗', chapitre:'📑', these:'🎓', actes:'🎤', rapport:'📋' };
+  el.innerHTML = refs.map(b => {
+    const realIdx = DB.biblio.indexOf(b);
+    const tags = (b.tags||'').split(',').filter(t=>t.trim()).map(t => `<span class="tag tag-terrain" style="font-size:0.65rem;">${t.trim()}</span>`).join('');
+    return `<div class="biblio-card">
+      <div class="card-header">
+        <div style="flex:1">
+          <div class="biblio-title">${typeIcons[b.type]||'•'} ${b.titre}</div>
+          <div class="biblio-authors">${b.auteurs}${b.annee ? ' (' + b.annee + ')' : ''}</div>
+          <div class="biblio-source">${b.source || ''}</div>
+          <div class="biblio-tags">${tags}</div>
+          ${b.notes ? `<div style="font-size:0.75rem;color:var(--encre-douce);margin-top:5px;font-style:italic;">${b.notes}</div>` : ''}
+        </div>
+        <div class="card-actions">
+          <button class="btn-icon" onclick="ouvrirModal('biblio', ${realIdx})">✏️</button>
+          <button class="btn-icon danger" onclick="supprimerBiblio(${realIdx})">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// TABLEAU DE BORD
+// ══════════════════════════════════════════
+function renderTableau() {
+  // Stats
+  document.getElementById('stat-taches').textContent = DB.taches.filter(t=>t.statut!=='fait').length;
+  document.getElementById('stat-events').textContent = DB.events.length;
+  document.getElementById('stat-contacts').textContent = DB.contacts.length;
+  document.getElementById('stat-sites').textContent = DB.sites.length;
+
+  // Tanks
+  const tanks = [
+    { id:'colloque', icon:'🎤', label:'Colloques', cat:'colloque' },
+    { id:'papier', icon:'📄', label:'Papiers', cat:'papier' },
+    { id:'terrain', icon:'🏜', label:'Terrain', cat:'terrain' },
+    { id:'asso', icon:'🤝', label:'Associations', cat:'asso' },
+    { id:'rdv', icon:'📞', label:'Rendez-vous', cat:'rdv' },
+    { id:'these', icon:'🎓', label:'Thèse', cat:'these' },
+  ];
+  const container = document.getElementById('tanks-container');
+  container.innerHTML = tanks.map(tank => {
+    const items = DB.taches.filter(t => t.cat === tank.cat && t.statut !== 'fait');
+    const count = items.length;
+    const itemsHtml = items.slice(0,4).map(t => {
+      return `<div class="tank-item ${t.statut}" onclick="changerSection('taches')">
+        ${t.titre}
+        ${t.date ? `<div class="tank-item-date">📅 ${formatDate(t.date)}</div>` : ''}
+      </div>`;
+    }).join('');
+    const plus = items.length > 4 ? `<div style="font-size:0.72rem;color:var(--gris);text-align:center;padding:4px;">+${items.length-4} de plus</div>` : '';
+    return `<div class="tank">
+      <div class="tank-header">
+        <div class="tank-title"><span class="tank-icon">${tank.icon}</span>${tank.label}</div>
+        <span class="tank-count">${count}</span>
+      </div>
+      ${itemsHtml || '<div style="font-size:0.78rem;color:var(--gris);text-align:center;padding:8px 0;">Vide</div>'}
+      ${plus}
+    </div>`;
+  }).join('');
+
+  // Prochains événements
+  const aujourd = new Date().toISOString().split('T')[0];
+  const prochains = DB.events.filter(e => e.date >= aujourd).slice(0,3);
+  const pe = document.getElementById('prochains-events');
+  if (!prochains.length) {
+    pe.innerHTML = '<div style="color:var(--gris);font-size:0.82rem;padding:8px 0;">Aucun événement à venir.</div>';
+  } else {
+    const moisNoms = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+    pe.innerHTML = prochains.map(e => {
+      const date = new Date(e.date + 'T00:00:00');
+      return `<div class="event-item">
+        <div class="event-date-block">
+          <div class="event-day">${date.getDate()}</div>
+          <div class="event-month">${moisNoms[date.getMonth()]}</div>
+        </div>
+        <div class="event-content">
+          <div class="event-title">${e.titre}</div>
+          <div class="event-meta">${e.type}${e.lieu ? ' · ' + e.lieu : ''}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+// ══════════════════════════════════════════
+// EXPORT JSON
+// ══════════════════════════════════════════
+function exporterDonnees() {
+  const data = {
+    export_date: new Date().toISOString(),
+    version: '1.0',
+    ...DB
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `these-archeo-export-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ══════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const [y, m, d] = dateStr.split('-');
+  const mois = ['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
+  return `${parseInt(d)} ${mois[parseInt(m)-1]} ${y}`;
+}
+
+// ── LANCEMENT ──
+init();
+</script>
+</body>
+</html>
